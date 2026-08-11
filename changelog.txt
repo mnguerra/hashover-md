@@ -1,7 +1,7 @@
 
 Changes by Manel Guerra 2026-08-11
 --------------------------------------------------------------------------------
-Version 0.1.0 of HashOver-md
+Version 1.0.0 of HashOver-md
 
 * Adding locale variables on mail sending
 * Adding version.json
