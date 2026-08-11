@@ -1,20 +1,21 @@
+
+Changes by Manel Guerra 2026-08-11
+--------------------------------------------------------------------------------
+Version 0.1.0 of HashOver-md
+
+* Adding locale variables on mail sending
+* Adding version.json
+* Closing this version in order to mantain compatibility with the original Hashover using xml files
+
+
 Changes by Manel Guerra 2026-07-23
 --------------------------------------------------------------------------------
-* Creating v1.0.0 mantaining php-mode for compatibility with original project.
-
-
-Changes by Manel Guerra 2026-07-16
---------------------------------------------------------------------------------
+* Creating v0.1.0 mantaining php-mode for compatibility with original project.
 * Adding locale variables to some literal string in php files
 * Modifying php-mode.php template to match javascript-mode.php template (first comments, second form)
-
-
-Changes by Manel Guerra 2026-07-12
---------------------------------------------------------------------------------
 * Adjust CSS for easy integration
 * Added Catalan translation
 * Swap order of appearence of comments' thread (first) and form to write (second)
-
 
 
 Changes by Jacob Barkdull 2019-08-06

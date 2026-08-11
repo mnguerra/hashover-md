@@ -63,7 +63,11 @@
 			'liked_cmt'	=> 'You \'Liked\' This Comment',
 			'op_cmt_note'	=> 'You will not be notified via e-mail',
 			'subbed_note'	=> 'will be notified via e-mail',
-			'unsubbed_note' => 'is not subscribed to e-mail notifications'
+			'unsubbed_note' => 'is not subscribed to e-mail notifications',
+			'mail_sb_nc'    => 'New comment',
+			'mail_sb_nr'    => 'New reply',
+			'mail_bd_ct'    => 'commented',
+            'mail_bd_rt'    => 'In reply to'
 		),
 
 		'ca' => array(
@@ -112,7 +116,11 @@
 			'liked_cmt'	=> 'Us ha agradat el comentari',
 			'op_cmt_note'	=> 'No sereu notificat per correu-e',
 			'subbed_note'	=> 'sereu notificat per correu-e',
-			'unsubbed_note' => 'no esteu subscrit per rebreu notificacions via correu-e'
+			'unsubbed_note' => 'no esteu subscrit per rebreu notificacions via correu-e',
+			'mail_sb_nc'    => 'Nou comentari',
+			'mail_sb_nr'    => 'Nova rèplica',
+			'mail_bd_ct'    => 'ha comentat',
+			'mail_bd_rt'    => 'En resposta a'
 		),
 
 		'es' => array(
@@ -161,7 +169,11 @@
 			'liked_cmt'	=> 'Usted \'Gusta\' Este Comentario',
 			'op_cmt_note'	=> 'No lo harás notificará por correo electrónico',
 			'subbed_note'	=> 'será notificado vía e-mail',
-			'unsubbed_note' => 'no es suscrito a las notificaciones por correo electrónico'
+			'unsubbed_note' => 'no es suscrito a las notificaciones por correo electrónico',
+			'mail_sb_nc'    => 'Nuevo comentario',
+			'mail_sb_nr'    => 'Nueva réplica',
+			'mail_bd_ct'    => 'ha comentado',
+            'mail_bd_rt'    => 'En respuesta a'
 		),
 
 		'jp' => array(
@@ -210,7 +222,11 @@
 			'liked_cmt'	=> '君「Liked」このコメントを',
 			'op_cmt_note'	=> 'あなたが電子メールを介して通知されません',
 			'subbed_note'	=> '電子メールを介して通知され',
-			'unsubbed_note' => 'は、電子メール通知にサブスクライブされていない'
+			'unsubbed_note' => 'は、電子メール通知にサブスクライブされていない',
+			'mail_sb_nc'    => '新评论',
+			'mail_sb_nr'    => '新回复',
+			'mail_bd_ct'    => '评论',
+            'mail_bd_rt'    => '回复'
 		),
 
 		'fr' => array(
@@ -259,7 +275,11 @@
 			'liked_cmt'	=> 'Vous avez &apos;aimé&apos; ce commentaire',
 			'op_cmt_note'	=> 'Vous ne serez pas notifié par email',
 			'subbed_note'	=> 'sera notifié par email',
-			'unsubbed_note'	=> 'ne s&apos;est pas abandonner aux notifications par email'
+			'unsubbed_note'	=> 'ne s&apos;est pas abandonner aux notifications par email',
+			'mail_sb_nc'    => 'Nouveau commentaire',
+			'mail_sb_nr'    => 'Nouvelle réponse',
+			'mail_bd_ct'    => 'commenté',
+            'mail_bd_rt'    => 'En réponse à'
 		)
 	);
 

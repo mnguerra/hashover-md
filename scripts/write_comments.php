@@ -245,14 +245,14 @@
 				if (isset($_POST['reply_to']) and !empty($_POST['reply_to'])) {
 					if (!preg_match('/[a-zA-Z]/i', $_POST['reply_to']) and file_exists($dir . '/' . $_POST['reply_to'] . ".xml")) {
 						$get_cmt = simplexml_load_file($dir . '/' . sanitize($_POST['reply_to'] . '.xml'));
-						$to_commenter = "\nIn reply to:\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($get_cmt->body)) . "\n\n";
-						$to_webmaster = "\nIn reply to " . $get_cmt->name . ":\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($get_cmt->body)) . "\n\n";
+						$to_commenter = "\n" . $text['mail_bd_rt'] .":\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($get_cmt->body)) . "\n\n";
+						$to_webmaster = "\n" . $text['mail_bd_rt'] . " " . $get_cmt->name . ":\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($get_cmt->body)) . "\n\n";
 						$decryto = encrypt($get_cmt->email);
 
 						if (!empty($decryto) and $decryto != $notification_email and $decryto != $email) {
 							if ($get_cmt['notifications'] == 'yes') {
 								if ($user_reply != 'yes') $header = "From: $noreply_email\r\nReply-To: $noreply_email";
-								mail($decryto, $_SERVER['HTTP_HOST'] . ' - New Reply', "From $from_email:\n\n\t" . strip_tags(stripslashes($_POST['comment'])) . "\n\n$to_commenter----\nPermalink: $page_url" . '#' . $permalink . "\nPage: $page_url", $header);
+								mail($decryto, $_SERVER['HTTP_HOST'] . ' - ' . $text['mail_sb_nr'], "$from_email" . " " . $text['mail_bd_ct'] .":\n\n\t" . strip_tags(stripslashes($_POST['comment'])) . "\n\n$to_commenter----\nPermalink: $page_url" . '#' . $permalink . "\nPage: $page_url", $header);
 							}
 						}
 					}
@@ -260,7 +260,7 @@
 
 				// Notify webmaster via e-mail
 				if ($write_cmt->email != encrypt($notification_email)) {
-					mail($notification_email, 'New Comment', "From $from_email:\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($clean_code)) . "\n\n$to_webmaster----\nPermalink: $page_url" . '#' . $permalink . "\nPage: $page_url", $header);
+					mail($notification_email, $_SERVER['HTTP_HOST'] . ' - ' . $text['mail_sb_nc'], "$from_email" . " " . $text['mail_bd_ct'] .":\n\n\t" . str_replace($reverse_datasearch, $reverse_datareplace, strip_tags($clean_code)) . "\n\n$to_webmaster----\nPermalink: $page_url" . '#' . $permalink . "\nPage: $page_url", $header);
 				}
 
 				// Set blank cookie for successful comment, kick visitor back to comment
