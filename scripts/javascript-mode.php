@@ -538,7 +538,7 @@ function sort_comments(method) {
 	// To reverse to original order switch previous indicated blocks with #showingcomments and #showingform
 
 
-	echo jsAddSlashes('<p style="font-size: 0.8em; text-align: center;">Comentaris fets amb <a rel="nofollow" href="https://github.com/jacobwb/hashover">HashOver</a> amb <a rel="nofollow" href="https://github.com/mnguerra/hashover">adaptacions pròpies</a>.</p>\n');
+	echo jsAddSlashes('<p style="font-size: 0.8em; text-align: center;">Comentaris fets amb <a rel="nofollow" href="https://github.com/mnguerra/hashover-md">HashOver-md</a>.</p>\n');
 
 	// Script execution ending time
 	$exec_time = explode(' ', microtime());
