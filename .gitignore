@@ -1,0 +1,4 @@
+pages/*
+scripts/secrets.php
+scripts/settings.php
+.idea/*
