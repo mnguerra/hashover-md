@@ -11,7 +11,7 @@ Version 1.0.0 of HashOver-md
 Changes by Manel Guerra 2026-07-23
 --------------------------------------------------------------------------------
 * Adding locale variables to some literal string in php files
-* Modifying php-mode.php template to match javascript-mode.php template (first comments, second form)
+* Modifying php-mode.php template to match javascript-mode.php presentation (first comments, second form)
 * Adjust CSS for easy integration
 * Added Catalan translation
 * Swap order of appearence of comments' thread (first) and form to write (second)
