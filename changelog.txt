@@ -10,7 +10,6 @@ Version 1.0.0 of HashOver-md
 
 Changes by Manel Guerra 2026-07-23
 --------------------------------------------------------------------------------
-* Creating v0.1.0 mantaining php-mode for compatibility with original project.
 * Adding locale variables to some literal string in php files
 * Modifying php-mode.php template to match javascript-mode.php template (first comments, second form)
 * Adjust CSS for easy integration
