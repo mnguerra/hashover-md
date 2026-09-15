@@ -1,3 +1,8 @@
+Changes by Manel Guerra 2026-09-15
+--------------------------------------------------------------------------------
+* Upgrading to PHP 8, better date management on relative comments (x time ago)
+* Multilingual mode for relative data comments, changes on locales.php
+
 
 Changes by Manel Guerra 2026-08-11
 --------------------------------------------------------------------------------

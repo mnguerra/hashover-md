@@ -84,18 +84,21 @@
 					$cur_date = new DateTime(date('m/d/Y'));
 					$interval = $make_cmtdate->diff($cur_date);
 
-					if ($interval->y != '') {
-						$cmt_date = $interval->y . ' year';
-						$cmt_date .= ($interval->y != '1') ? 's ago' : ' ago';
-					} else if ($interval->m != '') {
-						$cmt_date = $interval->m . ' month';
-						$cmt_date .= ($interval->m != '1') ? 's ago' : ' ago';
-					} else if ($interval->d != '') {
-						$cmt_date = $interval->d . ' day';
-							$cmt_date .= ($interval->d != '1') ? 's ago' : ' ago';
-					} else {
-						$cmt_date = $get_cmtdate[1] . ' today';
-					}
+                    if ($interval->y > 0) {
+                        $cmt_date = $text['cmt_tstart'] . ' ' . $interval->y . ' ';
+                        $cmt_date .= ($interval->y != 1) ? $text['cmt_years'] : $text['cmt_year'];
+                        $cmt_date .= ' '.$text['cmt_tend'];
+                    } else if ($interval->m > 0) {
+                        $cmt_date = $text['cmt_tstart'] . ' ' . $interval->m . ' ';
+                        $cmt_date .= ($interval->m != 1) ? $text['cmt_months'] : $text['cmt_month'];
+                        $cmt_date .= ' '.$text['cmt_tend'];
+                    } else if ($interval->d > 0) {
+                        $cmt_date = $text['cmt_tstart'] . ' ' . $interval->d . ' ';
+                        $cmt_date .= ($interval->d != 1) ? $text['cmt_days'] : $text['cmt_day'];
+                        $cmt_date .= ' '.$text['cmt_tend'];
+                    } else {
+                        $cmt_date = $get_cmtdate[1] . ' '.$text['cmt_today'];
+                    }
 				} else {
 					$cmt_date = $read_cmt->date;
 				}
