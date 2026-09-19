@@ -12,12 +12,12 @@
 	// NOTICE:
 	//
 	//	To retain your settings when downloading or otherwise upgrading 
-	//	to a new version of HashOver, it is recommended that you 
+	//	to a new version of HashOver-md, it is recommended that you
 	//	preserve this file, unless directed otherwise.
 
 
 	// Various Settings
-	$root_dir	= '/hashover/';					// HTTP root directory for comments
+	$root_dir	= '/hashover-md/';					// HTTP root directory for comments
 	$language	= 'en';						// Language used for forms, buttons, links, and tooltips
 	$name		= 'GNU Knows Who';				// Nickname when one isn't given
 	$template	= 'default';					// Comment layout template
@@ -28,7 +28,6 @@
 	$icon_size	= '45';						// Size of Gravatar icons in pixels
 	$indention	= 'left';					// Side to add comment indention on
 	$rows		= '5';						// Default comment box height in rows
-	$popular	= '5';						// Minimum likes a comment needs to be popular
 	$top_cmts	= '2';						// Number of comments allowed to become popular
 	$ip_addrs	= 'no';						// Whether to store users' IP addresses
 	$spam_IP_check	= 'php';					// Options 'javascript' / 'php' for respective modes, or 'both'

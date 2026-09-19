@@ -1,3 +1,12 @@
+Changes by Manel Guerra 2026-09-18
+--------------------------------------------------------------------------------
+Version 1.0.1, simplifying features:
+* Deleting like mechanism
+* Deleting RSS feeds for comments
+
+* Upgrading HTML
+
+
 Changes by Manel Guerra 2026-09-15
 --------------------------------------------------------------------------------
 * Upgrading to PHP 8, better date management on relative comments (x time ago)
@@ -99,7 +108,6 @@ Official mark of version 1.0!
 	In Reverse Order
 	By Commenter
 	By Date (newest first)
-	By Likes
 
 * Locale support, only three languages supported right now: English, Spanish,
   and Japanese. More languages will be added, those three are simply the ones

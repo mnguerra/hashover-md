@@ -27,7 +27,7 @@
 
 	// Get full page URL or Canonical URL
 	if ($mode == 'javascript') {
-		if (isset($_SERVER['HTTP_REFERER']) and !isset($_GET['rss'])) {
+		if (isset($_SERVER['HTTP_REFERER'])) {
 			$url_parts = parse_url($_SERVER['HTTP_REFERER']);
 			$url_host = '';
 
@@ -43,16 +43,12 @@
 
 			// Check if the script was requested by this server
 			if (!preg_match('/' . $domain . '/i', $url_host)) {
-				exit(jsAddSlashes('<b>HashOver - Error:</b> External use not allowed.', 'single'));
+				exit(jsAddSlashes('<b>HashOver-md - Error:</b> External use not allowed.', 'single'));
 			}
 
 			$page_url = (empty($canon_url)) ? $_SERVER['HTTP_REFERER'] : $canon_url;
 		} else {
-			if (!isset($_GET['rss'])) {
-				exit(jsAddSlashes('<b>HashOver - Error:</b> No way to get page URL, HTTP referrer not set.', 'single'));
-			} else {
-				$page_url = $_GET['rss'];
-			}
+            exit(jsAddSlashes('<b>HashOver-md - Error:</b> No way to get page URL, HTTP referrer not set.', 'single'));
 		}
 	} else {
 		if (empty($canon_url)) {
@@ -132,7 +128,7 @@
 	if ($ref_path != 'hashover-php') {
 		$dir = 'pages/' . $ref_path;
 	} else {
-		exit(jsAddSlashes('<b>HashOver - Error:</b> Failure setting comment directory name'));
+		exit(jsAddSlashes('<b>HashOver-md - Error:</b> Failure setting comment directory name'));
 	}
 
 ?>

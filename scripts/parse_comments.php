@@ -20,7 +20,7 @@
 	$array_count = 0;
 
 	function parse_comments($file, $variable, $check) {
-		global $mode, $root_dir, $ref_path, $text, $html_template, $icons, $icon_size, $short_dates, $top_likes, $popular, $domain, $indention, $admin_nickname, $admin_password, $script_query;
+		global $mode, $root_dir, $ref_path, $text, $html_template, $icons, $icon_size, $short_dates, $domain, $indention, $admin_nickname, $admin_password, $script_query;
 
 		// Generate permalink
 		$permalink = 'c' . str_replace('-', 'r', basename($file, '.xml'));
@@ -37,15 +37,11 @@
 		if (!isset($_GET['count_link']) or !isset($script_query)) {
 			if (($read_cmt = @simplexml_load_file($file)) !== false) {
 				$permalink .= ($check == 'yes') ? '' : '_pop';
-				if ($read_cmt['likes'] >= $popular) $top_likes["{$read_cmt['likes']}"] = $file;
 
 				$name_at = (preg_match('/^@.*?$/', $read_cmt->name)) ? '@' : '';
 				$name_class = (preg_match('/^@.*?$/', $read_cmt->name)) ? ' at' : '';
 				$user_login = false;
 				$admin_login = false;
-
-				// "Like" cookie
-				$like_cookie = md5($_SERVER['SERVER_NAME'] . $ref_path . '/' . basename($file, '.xml'));
 
 				if (!empty ($_COOKIE['name'])) {
 					$admin_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']));
@@ -111,23 +107,6 @@
 					$avatar_icon = '<a rel="nofollow" href="#' . $permalink . '" title="Permalink">#' . $permatext . '</a>';
 				}
 
-				// Setup "Like" link
-				if (!empty($_COOKIE[$like_cookie])) {
-					if ($_COOKIE[$like_cookie] == 'liked') {
-						$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
-						$like_title = $text['liked_cmt'];
-						$like_class = 'liked';
-					} else {
-						$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
-						$like_title = $text['like_cmt'];
-						$like_class = 'like';
-					}
-				} else {
-					$like_onclick = 'like(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); ';
-					$like_title = $text['like_cmt'];
-					$like_class = 'like';
-				}
-
 				// Define "Reply" link with appropriate tooltip
 				if (!empty($read_cmt->email) and $read_cmt['notifications'] == 'yes') {
 					if (!empty($_COOKIE['email']) and encrypt($_COOKIE['email']) == $read_cmt->email) {
@@ -167,18 +146,9 @@
 					$variable["$array_count"]['name'] = '<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>';
 					if (preg_match("/r/", $permalink)) $variable["$array_count"]['thread'] = '<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>';
 					$variable["$array_count"]['date'] = '<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>';
-					if ($read_cmt['likes'] > '0') $variable["$array_count"]['likes'] = $read_cmt['likes'] . ' Like' . (($read_cmt['likes'] != '1') ? 's' : '');
 					$variable["$array_count"]['sort_name'] = $read_cmt->name;
 					$variable["$array_count"]['sort_date'] = strtotime(str_replace('- ', '', $read_cmt->date));
-					$variable["$array_count"]['sort_likes'] = $read_cmt['likes'];
 					$variable["$array_count"]['notifications'] = $read_cmt['notifications'];
-
-					// Define "Like" link for everyone except original poster
-					if ($user_login == false) {
-						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
-							$variable["$array_count"]['like_link'] = '<a rel="nofollow" href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>';
-						}
-					}
 
 					// Define "Edit" link if proper login cookie set
 					if ($user_login == true or $admin_login == true) {
@@ -198,17 +168,8 @@
 					$variable .= "\t\t" . 'name: \'' . addcslashes('<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>', "'") . '\',' . PHP_EOL;
 					$variable .= (preg_match("/r/", $permalink)) ? "\t\t" . 'thread: \'' . addcslashes('<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>', "'") . '\',' . PHP_EOL : '';
 					$variable .= "\t\t" . 'date: \'' . addcslashes('<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>', "'") . '\',' . PHP_EOL;
-					$variable .= ($read_cmt['likes'] > '0') ? "\t\t" . 'likes: \'' . $read_cmt['likes'] . ' Like' . (($read_cmt['likes'] != '1') ? 's' : '') . '\',' . PHP_EOL : '';
 					$variable .= "\t\t" . 'sort_name: \'' . addcslashes($read_cmt->name, "'") . '\',' . PHP_EOL;
 					$variable .= "\t\t" . 'sort_date: ' . '\'' . strtotime(str_replace('- ', '', $read_cmt->date)) . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'sort_likes: \'' . $read_cmt['likes'] . '\',' . PHP_EOL;
-
-					// Define "Like" link for everyone except original poster
-					if ($user_login == false) {
-						if (empty($_COOKIE['email']) or encrypt($_COOKIE['email']) != $read_cmt->email) {
-							$variable .= "\t\t" . 'like_link: \'' . addcslashes('<a rel="nofollow" href="#" id="like-' . $permalink . '" onClick="' . $like_onclick . 'return false;" title="' . $like_title . '" class="' . $like_class . '">Like</a>', "'") . '\',' . PHP_EOL;
-						}
-					}
 
 					// Define "Edit" link if proper login cookie set
 					if ($user_login == true or $admin_login == true) {

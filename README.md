@@ -1,7 +1,7 @@
 # HashOver-md
 
 A self-hosted PHP comment system based on HashOver, substantially modified
-for storing comments in Markdown format.
+for storing comments in Markdown format, and oversimplifying the original features.
 
 ## Origin and Attribution
 
@@ -10,28 +10,7 @@ created by **Jacob Barkdull** (github.com/jacobwb).
 
 HashOver is a free and open source comment system designed as an alternative
 to services like Disqus. It adds a comment section to any website by including
-just a few lines of JavaScript or PHP.
-
-### Main Changes from the Original
-
-This project contains substantial modifications from HashOver 1.0.3rc4,
-including:
-
-- Custom HTML/CSS template adjustments
-- Modifications to the spam filtering logic
-- Configuration and localization tweaks
-- Other adaptations for our environment
-
-
-## License
-
-This software is licensed under the **GNU Affero General Public License v3
-(AGPL v3)**, as inherited from the original project.
-
-- Copyright © Jacob Barkdull (original work)
-- Copyright © Manel Guerra (css, viewing order and markdown format for commetns)
-
-See the [LICENSE](./LICENSE) file for the full text of the license.
+just a few lines of JavaScript.
 
 
 ## Using HashOver-md
@@ -40,7 +19,7 @@ Once the files have successfully been downloaded, extracted, proper permissions 
 
 ```
 <div id="hashover"></div>
-<script type="text/javascript" src="/hashover/comments.php"></script>
+<script type="text/javascript" src="/hashover-md/comments.php"></script>
 <noscript>You must have JavaScript enabled to use the comments.</noscript>
 ```
 
@@ -64,3 +43,28 @@ Also, create secrets.php and settings.php from secrets_initial.php and settings_
 
 For the original HashOver documentation, please visit the original repository:
 https://github.com/jacobwb/hashover
+
+
+### Main Changes from the Original
+
+This project contains substantial modifications from HashOver 1.0.3rc4,
+including:
+
+- Custom HTML/CSS template adjustments
+- Modifications to the spam filtering logic
+- Configuration and localization tweaks
+- Other adaptations for our environment
+- Deleting of liking comments and rss feeds for comments
+
+
+## License
+
+This software is licensed under the **GNU Affero General Public License v3
+(AGPL v3)**, as inherited from the original project.
+
+- Copyright © Jacob Barkdull (original work)
+- Copyright © Manel Guerra (css, viewing order and markdown format for comments)
+
+See the [LICENSE](./LICENSE) file for the full text of the license.
+
+

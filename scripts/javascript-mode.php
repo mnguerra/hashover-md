@@ -73,14 +73,6 @@ if (document.querySelector('link[href="<?php echo $root_dir; ?>comments.css"]') 
 	head.appendChild(link);
 }
 
-// Add comment RSS feed to page header
-link = document.createElement('link');
-link.rel = 'alternate';
-link.href = '<?php echo $root_dir; ?>comments.php?rss=' + location.href.replace(/#.*$/g, '') + "&title=<?php echo (isset($_GET['pagetitle'])) ? $_GET['pagetitle'] . '"' : '" + document.title'; ?>;
-link.type = 'application/rss+xml';
-link.title = 'Comments';
-head.appendChild(link);
-
 // Put number of comments into "cmtcount" identified HTML element
 if (document.getElementById('cmtcount') != null) {
 	if (<?php echo $total_count - 1; ?> != 0) {
@@ -100,7 +92,7 @@ function reply(r, f) {
 	</span>\n\
 	<b class="cmtfont"><?php echo $text['reply_to_cmt']; ?></b>\n\
 	<span<?php echo (isset($_COOKIE['name']) and !empty($_COOKIE['name'])) ? ' style="max-height: 0px;"' : ''; ?> class="options" id="options-'+r+'"><hr style="clear: both;">\n\
-	<table width="100%" cellpadding="0" cellspacing="0" align="center">\n\
+	<table width="100%" cellpadding="0" cellspacing="0">\n\
 	<tbody>\n<tr>\n';
 
 <?php if ($icons == 'yes') { ?>
@@ -110,31 +102,29 @@ function reply(r, f) {
 <?php }?>
 
 	if (name_on == 'yes') {
-		form_html += '<td align="right">\n<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : ''; ?>" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n</td>\n';
+		form_html += '<td>\n<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : ''; ?>" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n</td>\n';
 	}
 
 	if (passwd_on == 'yes') {
-		form_html += '<td align="right">\n<input type="password" name="password" title="<?php echo $text['password_tip']; ?>" class="opt-password" placeholder="<?php echo $text['password']; ?>">\n</td>\n';
+		form_html += '<td>\n<input type="password" name="password" title="<?php echo $text['password_tip']; ?>" class="opt-password" placeholder="<?php echo $text['password']; ?>">\n</td>\n';
 	}
 	<?php if ($is_mobile == 'yes') echo 'form_html += \'</tr>\n<tr>\n\';'; ?>
 
 	if (email_on == 'yes') {
-		form_html += '<td align="right">\n<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="opt-email" placeholder="<?php echo $text['email']; ?>">\n</td>\n';
+		form_html += '<td>\n<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="opt-email" placeholder="<?php echo $text['email']; ?>">\n</td>\n';
 	}
 
 	if (sites_on == 'yes') {
-		form_html += '<td align="right">\n<input type="text" name="website" title="<?php echo $text['website']; ?>" value="<?php echo (isset($_COOKIE['website'])) ? $_COOKIE['website'] : ''; ?>" class="opt-website" placeholder="<?php echo $text['website']; ?>">\n</td>\n';
+		form_html += '<td>\n<input type="text" name="website" title="<?php echo $text['website']; ?>" value="<?php echo (isset($_COOKIE['website'])) ? $_COOKIE['website'] : ''; ?>" class="opt-website" placeholder="<?php echo $text['website']; ?>">\n</td>\n';
 	}
 
 	form_html += '</tr>\n\
 	</tbody>\n</table>\n</span>\n\
-	<center>\n\
 	<textarea rows="6" cols="62" name="comment" placeholder="<?php echo $text['reply_form']; ?>" style="width: 100%;" title="<?php echo $text['cmt_tip']; ?>"></textarea><br>\n\
 	<input class="post_cmt" type="submit" value="<?php echo $text['post_reply']; ?>" style="width: 100%;" onClick="return noemailreply(\''+r+'\');" onsubmit="return noemailreply(\''+r+'\');">\n\<?php
 	echo (isset($_GET['canon_url']) or isset($canon_url)) ? "\n\t" . '<input type="hidden" name="canon_url" value="' . $page_url . '">\n\\' . PHP_EOL : PHP_EOL; ?>
 	<input type="hidden" name="cmtfile" value="' + f + '">\n\
-	<input type="hidden" name="reply_to" value="'+f+'">\n\
-	</center>\n';
+	<input type="hidden" name="reply_to" value="'+f+'">\n';
 
 	document.getElementById('cmtopts-' + r).style.display = 'none';
 	document.getElementById('cmtforms-' + r).innerHTML = form_html;
@@ -158,34 +148,32 @@ function editcmt(e, f, s) {
 	</span>\n\
 	<b class="cmtfont"><?php echo $text['edit_cmt']; ?></b>\n\
 	<span class="options"><hr style="clear: both;">\n\
-	<table width="100%" cellpadding="0" cellspacing="0" align="center">\n\
+	<table width="100%" cellpadding="0" cellspacing="0">\n\
 	<tbody>\n<tr>\n\
 <?php if ($icons == 'yes') { ?>
 	<td width="1%" rowspan="2">\n\
 	<?php echo $avatar_image; ?>\n\
 	</td>\n\
 <?php } ?>
-	<td align="right">\n\
+	<td>\n\
 	<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="' + document.getElementById('opt-name-' + e).innerHTML.replace(/<.*?>(.*?)<.*?>/gi, '$1') + '" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n\
 	</td>\n\
-	<td align="right">\n\
+	<td>\n\
 	<input type="password" name="password" title="<?php echo $text['password_tip']; ?>" class="opt-password" placeholder="<?php echo $text['password']; ?>">\n\
 	</td>\n\
 <?php if ($is_mobile == 'yes') echo "\t" . '</tr>\n<tr>\n\\'; ?>
-	<td align="right">\n\
+	<td>\n\
 	<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="opt-email" placeholder="<?php echo $text['email']; ?>">\n\
 	</td>\n\
-	<td align="right">\n\
+	<td>\n\
 	<input type="text" name="website" title="<?php echo $text['website']; ?>" value="' + website + '" class="opt-website" placeholder="<?php echo $text['website']; ?>">\n\
 	</td>\n\
 	</tr>\n\
 	</tbody>\n</table>\n</span>\n\
-	<center>\n\
 	<textarea rows="10" cols="62" name="comment" style="width: 100%;" title="<?php echo $text['cmt_tip']; ?>">' + cmtdata + '</textarea><br>\n\
 	<input class="post_cmt" type="submit" name="edit" value="<?php echo $text['save_edit']; ?>" style="width: 100%;">\n\
 	<input type="hidden" name="cmtfile" value="' + f + '">\n\<?php
-	echo (isset($_GET['canon_url']) or isset($canon_url)) ? "\n\t" . '<input type="hidden" name="canon_url" value="' . $page_url . '">\n\\' . PHP_EOL : PHP_EOL; ?>
-	</center>\n';
+	echo (isset($_GET['canon_url']) or isset($canon_url)) ? "\n\t" . '<input type="hidden" name="canon_url" value="' . $page_url . '">\n\\' . PHP_EOL : PHP_EOL; ?>';
 
 	document.getElementById('reply_form-' + e).comment.focus ();
 	return false
@@ -196,36 +184,6 @@ function cancelform(f) {
 	document.getElementById('cmtopts-' + f).style.display = '';
 	document.getElementById('cmtforms-' + f).innerHTML = '';
 	return false;
-}
-
-// Function to like a comment
-function like(c, f) {
-	// Load "like.php"
-	var like = new XMLHttpRequest();
-	like.open('GET', '<?php echo $root_dir . 'scripts/like.php?like=' . $ref_path; ?>/' + f);
-	like.send();
-
-	// Get number of likes
-	if (document.getElementById('likes-' + c).innerHTML != '') {
-		var likes = parseInt(document.getElementById('likes-' + c).innerHTML.replace(/[^0-9]/g, ''));
-	} else {
-		var likes = parseInt(0);
-	}
-
-	// Change "Like" button title and class; Increase likes
-	if (document.getElementById('like-' + c).className == 'like') {
-		document.getElementById('like-' + c).className = 'liked';
-		document.getElementById('like-' + c).title = '<?php echo addcslashes($text['liked_cmt'], "'"); ?>';
-		likes++;
-	} else {
-		document.getElementById('like-' + c).className = 'like';
-		document.getElementById('like-' + c).title = '<?php echo addcslashes($text['like_cmt'], "'"); ?>';
-		likes--;
-	}
-
-	// Change number of likes
-	var like_count = (likes != 1) ? likes + ' Likes' : likes + ' Like';
-	document.getElementById('likes-' + c).innerHTML = (likes > 0) ? '<b>' + like_count + '</b>' : '';
 }
 
 // Displays options
@@ -296,8 +254,6 @@ function parse_template(object, sort, method) {
 			name = object['name'],
 			thread = (object['thread']) ? object['thread'] : '',
 			date = object['date'],
-			likes = (object['likes']) ? object['likes'] : '',
-			like_link = (object['like_link']) ? object['like_link'] : '',
 			edit_link = (object['edit_link']) ? object['edit_link'] : '',
 			reply_link = object['reply_link'],
 			comment = object['comment'],
@@ -363,17 +319,8 @@ function sort_comments(method) {
 			for (var comment in tmpSortArray) {
 				parse_template(tmpSortArray[comment], true, method);
 			}
-		},
-
-		bylikes: function() {
-			var tmpSortArray = comments.slice(0).sort(function(a, b) {
-				return b.sort_likes - a.sort_likes;
-			})
-
-			for (var comment in tmpSortArray) {
-				parse_template(tmpSortArray[comment], true, method);
-			}
 		}
+
 	}
 
 	show_cmt = '';
@@ -397,23 +344,6 @@ function sort_comments(method) {
 
 	// Changed order of appearence from this point to next indication (#showingcomments)
 
-	// Display three most popular comments
-	if (!empty($top_likes)) {
-		echo jsAddSlashes('<br><b class="cmtfont">' . $text['popular_cmts'] . ' Comment' . ((count($top_likes) != '1') ? 's' : '') . ':</b>\n') . PHP_EOL;
-		echo 'var popComments = [' . PHP_EOL;
-
-		for ($p = 1; $p <= count($top_likes) and $p <= $top_cmts; $p++) {
-			if (!empty($top_likes)) {
-				echo parse_comments(array_shift($top_likes), '', 'no');
-			}
-		}
-
-		echo '];' . PHP_EOL . PHP_EOL;
-		echo 'for (var comment in popComments) {' . PHP_EOL;
-		echo "\t" . 'parse_template(popComments[comment], false);' . PHP_EOL;
-		echo '}' . PHP_EOL . PHP_EOL;
-	}
-
 	if (!empty($show_cmt)) {
 		echo 'var comments = [' . PHP_EOL;
 		echo $show_cmt;
@@ -436,7 +366,6 @@ function sort_comments(method) {
 		echo jsAddSlashes('<option value="descending">' . $text['sort_descend'] . '</option>\n');
 		echo jsAddSlashes('<option value="byname">' . $text['sort_byname'] . '</option>\n');
 		echo jsAddSlashes('<option value="bydate">' . $text['sort_bydate'] . '</option>\n');
-		echo jsAddSlashes('<option value="bylikes">' . $text['sort_bylikes'] . '</option>\n');
 		echo jsAddSlashes('</select>\n</span>\n') . PHP_EOL;
 
 		echo jsAddSlashes('<div id="sort_div">\n'). PHP_EOL;
@@ -471,14 +400,14 @@ function sort_comments(method) {
 
 	// Display name input tag if told to
 	echo "if (name_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td align="right">\n');
+	echo "\t" . jsAddSlashes('<td>\n');
 	echo "\t" . jsAddSlashes('<input type="text" name="name" title="' . $text['nickname_tip'] . '"' . (isset($_COOKIE['name']) ? ' value="' . $_COOKIE['name'] . '"' : '') . ' maxlength="30" class="opt-name" placeholder="' . $text['nickname'] . '">\n');
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
 
 	// Display password input tag if told to
 	echo "if (passwd_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td align="right">\n');
+	echo "\t" . jsAddSlashes('<td>\n');
 	echo "\t" . jsAddSlashes('<input type="password" name="password" title="' . $text['password_tip'] . '"' . (isset($_COOKIE['password']) ? ' value="' . $_COOKIE['password'] . '"' : '') . ' class="opt-password" placeholder="' . $text['password'] . '">\n');
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
@@ -486,7 +415,7 @@ function sort_comments(method) {
 	// Add second table row on mobile devices
 	if ($is_mobile == 'yes') {
 		echo "if (name_on == 'yes' && passwd_on == 'yes') {\n";
-		echo "\t" . jsAddSlashes('<td width="1%" align="right">\n');
+		echo "\t" . jsAddSlashes('<td width="1%">\n');
 		echo "\t" . jsAddSlashes('<input name="login" title="Login (optional)" class="opt-login" type="submit" value="">\n');
 		echo "\t" . jsAddSlashes('</td>\n');
 		echo "}\n\n";
@@ -495,21 +424,21 @@ function sort_comments(method) {
 
 	// Display email input tag if told to
 	echo "if (email_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td align="right">\n');
+	echo "\t" . jsAddSlashes('<td>\n');
 	echo "\t" . jsAddSlashes('<input type="text" name="email" title="' . $text['email'] . '"' . (isset($_COOKIE['email']) ? ' value="' . $_COOKIE['email'] . '"' : '') . ' class="opt-email" placeholder="' . $text['email'] . '">\n');
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
 
 	// Display website input tag if told to
 	echo "if (sites_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td' . (($is_mobile == 'yes') ? ' colspan="2"' : '') . ' align="right">\n');
+	echo "\t" . jsAddSlashes('<td' . (($is_mobile == 'yes') ? ' colspan="2"' : '') . '>\n');
 	echo "\t" . jsAddSlashes('<input type="text" name="website" title="' . $text['website'] . '"' . (isset($_COOKIE['website']) ? ' value="' . $_COOKIE['website'] . '"' : '') . ' class="opt-website" placeholder="' . $text['website'] . '">\n');
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
 
 	if ($is_mobile != 'yes') {
 		echo "if (name_on == 'yes' && passwd_on == 'yes') {\n";
-		echo "\t" . jsAddSlashes('<td width="1%" align="right">\n');
+		echo "\t" . jsAddSlashes('<td width="1%">\n');
 		echo "\t" . jsAddSlashes('<input name="login" title="Login (optional)" class="opt-login" type="submit" value="">\n');
 		echo "\t" . jsAddSlashes('</td>\n');
 		echo "}\n\n";
@@ -536,7 +465,6 @@ function sort_comments(method) {
 	// Changed order of appearence from last indication (#showingform)
 
 	// To reverse to original order switch previous indicated blocks with #showingcomments and #showingform
-
 
 	echo jsAddSlashes('<p style="font-size: 0.8em; text-align: center;">Comentaris fets amb <a rel="nofollow" href="https://github.com/mnguerra/hashover-md">HashOver-md</a>.</p>\n');
 

@@ -8,7 +8,6 @@
 	//	conditions, unless such conditions are required by law.
 
 
-	$top_likes	= array();	// For sorting top comments
 	$subfile_count	= array();	// Individual comment thread count
 	$cmt_count	= '1';		// Comment count excluding replies
 	$total_count	= '1';		// Comment count including replies

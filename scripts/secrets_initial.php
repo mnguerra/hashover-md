@@ -12,7 +12,7 @@
 	// IMPORTANT:
 	//
 	//	To maintain proper functionality when downloading or otherwise 
-	//	upgrading to a new version of HashOver, it is important that you 
+	//	upgrading to a new version of HashOver-md, it is important that you
 	//	preserve this file, unless directed otherwise.
 	//
 	//	It is also important to choose UNIQUE values for the encryption key, 

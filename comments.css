@@ -244,24 +244,6 @@
 #hashover .cmtdiv .cmtopts span.cmtbuttons a:hover {
 }
 
-#hashover .cmtdiv .cmtopts span.cmtbuttons a.like:active {
-	background-image: url('./images/liked.png');
-	background-color: #FFDDDB;
-}
-
-#hashover .cmtdiv .cmtopts span.cmtbuttons a.liked:active {
-	background-image: url('./images/like.png');
-	background-color: #DBDBDB;
-}
-
-#hashover a.like {
-	background-image: url('./images/like.png');
-}
-
-#hashover a.liked {
-	background-image: url('./images/liked.png');
-}
-
 #hashover a.edit {
 	background-image: url('./images/edit.png');
 }
@@ -313,6 +295,7 @@
 #hashover form div.cmtbox table tr td,
 #hashover form div.cmtbox table tr {
     border: none !important;
+    text-align: right;
 }
 
 #hashover .cmtdiv.reply .cmtbubble {

@@ -28,15 +28,14 @@
 	//
 	//	Features restricted use of HTML tags, automatic URL links, avatar 
 	//	icons, replies, comment editing and deletion, notification emails, 
-	//	comment RSS feeds, likes, popular comments, customizable CSS, 
-	//	referrer checking, permalinks, and more!
+	//	customizable CSS, referrer checking, permalinks, and more!
 	//
 	//--------------------
 	//
 	// Change Log:
 	//
 	//	Please record your modifications to code:
-	//	/hashover/changelog.txt
+	//	/hashover-md/changelog.txt
 
 
 	// Display source code
@@ -71,26 +70,26 @@
 	}
 
 	if (version_compare(PHP_VERSION, '5.3.3') < 0) {
-		exit(jsAddSlashes('<b>HashOver - Error:</b> PHP ' . current(explode('-', PHP_VERSION)) . ' is too old. Must be at least version 5.3.3.', 'single'));
+		exit(jsAddSlashes('<b>HashOver-md - Error:</b> PHP ' . current(explode('-', PHP_VERSION)) . ' is too old. Must be at least version 5.3.3.', 'single'));
 	}
 
 	// Include settings file, error on fail
 	if (!include(__DIR__ . '/scripts/settings.php')) {
 		if (empty($notification_email) and empty($encryption_key)) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> file "settings.php" is required (with permission 0755)', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md - Error:</b> file "settings.php" is required (with permission 0755)', 'single'));
 		}
 	}
 
 	// Include encryption key & notification e-mail, error on fail
 	if (!include('./scripts/secrets.php')) {
 		if (empty($notification_email) and empty($encryption_key)) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> file "secrets.php" is required (with permission 0755)', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md - Error:</b> file "secrets.php" is required (with permission 0755)', 'single'));
 		}
 	}
 
 	// Exit if encryption key, notification email, or administrative nickname or password set to defaults
 	if ($encryption_key == '8CharKey' || $notification_email == 'example@example.com' || $admin_nickname == 'admin' || $admin_password == 'passwd') {
-		exit(jsAddSlashes('<b>HashOver:</b> The variable values in /hashover/scripts/secrets.php need to be UNIQUE.', 'single'));
+		exit(jsAddSlashes('<b>HashOver-md:</b> The variable values in /hashover/scripts/secrets.php need to be UNIQUE.', 'single'));
 	}
 
 	// Exit if visitor's IP address is in block list file
@@ -98,19 +97,19 @@
 		$blockedIPs = explode(PHP_EOL, file_get_contents('./blocklist.txt'));
 
 		if (in_array($_SERVER['REMOTE_ADDR'], $blockedIPs)) {
-			exit(jsAddSlashes('<b>HashOver:</b> You are blocked!', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
 		}
 	}
 
 	// Check user's IP address against stopforumspam.com
 	if ($spam_IP_check == 'both') {
 		if (preg_match('/yes/', file_get_contents('http://www.stopforumspam.com/api?ip=' . $_SERVER['REMOTE_ADDR']))) {
-			exit(jsAddSlashes('<b>HashOver:</b> You are blocked!', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
 		}
 	} else {
 		if ($spam_IP_check == $mode) {
 			if (preg_match('/yes/', file_get_contents('http://www.stopforumspam.com/api?ip=' . $_SERVER['REMOTE_ADDR']))) {
-				exit(jsAddSlashes('<b>HashOver:</b> You are blocked!', 'single'));
+				exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
 			}
 		}
 	}
@@ -139,31 +138,24 @@
 		'./scripts/locales.php'
 	);
 
-	// Load scripts for displaying comments or RSS feed
-	if (!isset($_GET['rss'])) {
-		array_push($include_files,
-			'./scripts/parse_comments.php',
-			'./scripts/deletion_notice.php',
-			'./scripts/read_comments.php',
-			'./scripts/write_comments.php'
-		);
-	} else {
-		array_push($include_files,
-			'./scripts/rss-output.php'
-		);
-	}
+    array_push($include_files,
+        './scripts/parse_comments.php',
+        './scripts/deletion_notice.php',
+        './scripts/read_comments.php',
+        './scripts/write_comments.php'
+    );
 
 	// Actually include the scripts; display error on failure
 	foreach ($include_files as $script) {
 		if (!include($script)) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> "' . $script . '" file could not be included!', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md - Error:</b> "' . $script . '" file could not be included!', 'single'));
 		}
 	}
 
 	// Create comment thread directory & error on fail
 	if (!file_exists($dir) and !isset($_GET['count_link'])) {
 		if (!mkdir($dir, 0755) and !chmod($dir, 0755)) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> Failed to create comment thread directory at "' . $dir . '"', 'single'));
+			exit(jsAddSlashes('<b>HashOver-md - Error:</b> Failed to create comment thread directory at "' . $dir . '"', 'single'));
 		}
 	}
 
@@ -240,20 +232,13 @@
 	}
 
 	read_comments($dir, 'yes'); // Run read_comments function
-	krsort($top_likes); // Sort popular comments
 
 	// Construct avatar image tag
 	$user_avatar = get_user_avatar((!empty($_COOKIE['email'])) ? md5(strtolower(trim($_COOKIE['email']))) : '');
 	$avatar_image = '<img align="left" width="' . $icon_size . '" height="' . $icon_size . '" src="' . $user_avatar . '">';
 
-	if ($mode == 'php') {
-		if (!include('./scripts/php-mode.php')) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> file "php-mode.php" could not be included!', 'single'));
-		}
-	} else {
-		if (!include('./scripts/javascript-mode.php')) {
-			exit(jsAddSlashes('<b>HashOver - Error:</b> file "javascript-mode.php" could not be included!', 'single'));
-		}
-	}
+    if (!include('./scripts/javascript-mode.php')) {
+        exit(jsAddSlashes('<b>HashOver-md - Error:</b> file "javascript-mode.php" could not be included!', 'single'));
+    }
 
 ?>

@@ -22,7 +22,7 @@
 
 		$str = $string . '';
 		$encryption_key = str_replace(chr(32), '', $encryption_key);
-		if (strlen($encryption_key) < 8) exit(jsAddSlashes('<b>HashOver - Error:</b> Key error, make sure it\'s at least 8 characters long.', 'single'));
+		if (strlen($encryption_key) < 8) exit(jsAddSlashes('<b>HashOver-md - Error:</b> Key error, make sure it\'s at least 8 characters long.', 'single'));
 		$kl = strlen($encryption_key) < 32 ? strlen($encryption_key) : 32;
 		$k = array();
 

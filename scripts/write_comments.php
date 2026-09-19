@@ -184,7 +184,6 @@
 			$write_cmt->email = (!empty($email) and $email != $text['email']) ? str_replace('"', '&quot;', encrypt(stripslashes(xml_sanitize($email)))) : '';
 			$write_cmt->website = (!empty($website)) ? xml_sanitize(trim($website, ' ')) : '';
 			$write_cmt->date = date('m/d/Y - g:ia');
-			$write_cmt['likes'] = '0';
 			$write_cmt['notifications'] = 'yes';
 			$write_cmt['ipaddr'] = ($ip_addrs == 'yes') ? $_SERVER['REMOTE_ADDR'] : '';
 			$write_cmt->body = xml_sanitize($clean_code); // Final comment body
