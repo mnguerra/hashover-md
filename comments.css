@@ -29,8 +29,6 @@
 	background-color: #f5f5f5 ! important;
 	color: #222222;
 	border: 1px solid #eaeaea;
-	outline-offset: none;
-	outline: -webkit-focus-ring-color none;
 }
 
 #hashover form input,
@@ -38,9 +36,6 @@
 #hashover form table input,
 #hashover .cmtdiv label {
 	transition: all 120ms linear 0ms;
-	-moz-transition: all 120ms ease 0ms;
-	-webkit-transition: all 120ms ease 0ms;
-	-o-transition: all 120ms ease 0ms;
 }
 
 #hashover form input,
@@ -50,16 +45,12 @@
 #hashover .cmtdiv code,
 #hashover .cmtdiv label {
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-o-box-sizing: border-box;
 }
 
 #hashover form input,
 #hashover form table input,
 #hashover form div.cmtbox,
 #hashover .cmtbubble,
-#hashover .cmtdiv input.delete,
 #hashover img,
 #hashover .cmtdiv pre,
 #hashover .cmtdiv code,
@@ -68,9 +59,6 @@
 #hashover .cmtdiv label,
 #hashover .cmtfont#message {
 	border-radius: 5px 5px 5px 5px;
-	-moz-border-radius: 5px 5px 5px 5px;
-	-webkit-border-radius: 5px 5px 5px 5px;
-	-o-border-radius: 5px 5px 5px 5px;
 }
 
 #hashover #requiredFields {
@@ -83,9 +71,6 @@
 	padding: 5px 5px 8px 5px;
 	vertical-align: top;
 	border-radius: 5px 5px 0px 0px;
-	-moz-border-radius: 5px 5px 0px 0px;
-	-webkit-border-radius: 5px 5px 0px 0px;
-	-o-border-radius: 5px 5px 0px 0px;
 	resize: vertical;
 }
 
@@ -93,9 +78,6 @@
 	border-top: none;
 	margin-top: 0px ! important;
 	border-radius: 0px 0px 5px 5px;
-	-moz-border-radius: 0px 0px 5px 5px;
-	-webkit-border-radius: 0px 0px 5px 5px;
-	-o-border-radius: 0px 0px 5px 5px;
 	padding: 6px 4px 6px 4px;
 }
 
@@ -126,12 +108,8 @@
 }
 
 #hashover textarea:focus,
-#hashover input[type="text"]:focus,
-#hashover input[type="password"]:focus {
+#hashover input[type="text"]:focus {
 	box-shadow: 0px 0px 1px #666666 ! important;
-	-moz-box-shadow: 0px 0px 1px #666666 ! important;
-	-webkit-box-shadow: 0px 0px 1px #666666 ! important;
-	-o-box-shadow: 0px 0px 1px #666666 ! important;
 }
 
 #hashover form table input {
@@ -183,17 +161,6 @@
 	background-image: url('./images/name.png');
 }
 
-#hashover input.opt-password {
-	background-image: url('./images/password.png');
-}
-
-#hashover input.opt-login {
-	width: 36px;
-	background-image: url('./images/login.png');
-	background-position: center center;
-	cursor: pointer;
-}
-
 #hashover input.opt-email {
 	background-image: url('./images/email.png');
 }
@@ -233,19 +200,12 @@
 	font-size: 0px;
 	overflow: hidden ! important;
 	transition: background 140ms linear 0ms;
-	-moz-transition: background 140ms linear 0ms;
-	-webkit-transition: background 140ms linear 0ms;
-	-o-transition: background 140ms linear 0ms;
 }
 
 #hashover .cmtdiv .cmtopts span.cmtbuttons a:first-child {
 }
 
 #hashover .cmtdiv .cmtopts span.cmtbuttons a:hover {
-}
-
-#hashover a.edit {
-	background-image: url('./images/edit.png');
 }
 
 #hashover a.has-email {
@@ -341,7 +301,6 @@
 #hashover .cmtdiv input.post_cmt {
 	margin: 0px;
 	border: none;
-	margin-top: 0px ! important;
 	background-color: #F0F0F0;
 }
 
@@ -355,18 +314,13 @@
 }
 
 #hashover .cmtdiv input[type="button"],
-#hashover .cmtdiv input.delete[type="submit"],
 #hashover .cmtdiv .optionbuttons a,
 #hashover .cmtdiv label {
 	display: inline-block;
 	border: 1px solid transparent ! important;
 	background: transparent ! important;
-	padding: 3px 4px 3px 4px ! important;
-	margin-bottom: 5px;
-}
-
-#hashover .cmtdiv label {
 	padding: 2px 5px 0px 1px ! important;
+	margin-bottom: 5px;
 }
 
 #hashover .cmtdiv .optionbuttons a {
@@ -389,11 +343,7 @@
 	display: block;
 	overflow: hidden;
 	width: 100%;
-	/*background-color: #F0F0F0;*/
 	transition: all 0.15s linear 0ms;
-	-moz-transition: all 0.15s linear 0ms;
-	-webkit-transition: all 0.15s linear 0ms;
-	-o-transition: all 0.15s linear 0ms;
 }
 
 #hashover .cmtdiv table input {
@@ -407,15 +357,16 @@
 	border-right: none ! important;
 	border-color: #C1C1C1;
 	border-radius: 0px ! important;
-	-moz-border-radius: 0px ! important;
-	-webkit-border-radius: 0px ! important;
-	-o-border-radius: 0px ! important;
 }
 
 #hashover .cmtfont {
-	font-size: 16px;
+	font-size: 13px;
 	display: inline-block;
 	padding-top: 2px;
+}
+
+#hashover .cmtfontid {
+	text-transform: uppercase;
 }
 
 #hashover .cmtdiv .cmtfont {
@@ -439,10 +390,6 @@
 	overflow: hidden;
 }
 
-#hashover .cmtdiv .cmtheader a {
-    font-size: 0.8em;
-}
-
 #hashover .cmtdiv.reply .cmtheader {
 	padding: 8px 8px 6px 8px;
 }
@@ -451,7 +398,6 @@
 }
 
 #hashover .cmtdiv.reply .cmtheader .cmtfont {
-	font-size: 16px;
 	margin-top: -1px;
 }
 
@@ -559,22 +505,6 @@
 	vertical-align: middle;
 	margin-top: 1px;
 	margin-bottom: 2px;
-}
-
-#hashover .cmtdiv .optionbuttons input.delete:hover,
-#hashover .cmtdiv .optionbuttons input.delete:focus {
-	border: 1px solid #BB0000 ! important;
-	background-color: #FF0000 ! important;
-	color: #FCFCFC ! important;
-	cursor: pointer;
-
-}
-
-#hashover .cmtdiv input.delete:focus {
-	box-shadow: 0px 0px 3px #FF5555 ! important;
-	-moz-box-shadow: 0px 0px 3px #FF5555 ! important;
-	-webkit-box-shadow: 0px 0px 3px #FF5555 ! important;
-	-o-box-shadow: 0px 0px 3px #FF5555 ! important;
 }
 
 #hashover .cmtdiv .cmtnote.cmtfont {

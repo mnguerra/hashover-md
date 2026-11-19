@@ -1,6 +1,7 @@
 <?php
 
-	// Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -20,7 +21,7 @@
 	$array_count = 0;
 
 	function parse_comments($file, $variable, $check) {
-		global $mode, $root_dir, $ref_path, $text, $html_template, $icons, $icon_size, $short_dates, $domain, $indention, $admin_nickname, $admin_password, $script_query;
+		global $root_dir, $ref_path, $text, $html_template, $icons, $icon_size, $short_dates, $domain, $indention, $admin_nickname, $admin_name, $script_query;
 
 		// Generate permalink
 		$permalink = 'c' . str_replace('-', 'r', basename($file, '.xml'));
@@ -38,39 +39,10 @@
 			if (($read_cmt = @simplexml_load_file($file)) !== false) {
 				$permalink .= ($check == 'yes') ? '' : '_pop';
 
-				$name_at = (preg_match('/^@.*?$/', $read_cmt->name)) ? '@' : '';
-				$name_class = (preg_match('/^@.*?$/', $read_cmt->name)) ? ' at' : '';
-				$user_login = false;
-				$admin_login = false;
-
-				if (!empty ($_COOKIE['name'])) {
-					$admin_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $_COOKIE['name']));
-
-					if (!empty($_COOKIE[$admin_cookie])) {
-						if ($_COOKIE[$admin_cookie] == hash('ripemd160', $admin_nickname . md5(encrypt($admin_password)))) {
-							$admin_login = true;
-						}
-					}
-				}
-
-				if (!empty($read_cmt->name) and !empty($read_cmt->passwd)) {
-					$edit_cookie = 'hashover-' . strtolower(str_replace(' ', '-', $read_cmt->name));
-
-					if (!empty($_COOKIE[$edit_cookie])) {
-						if ($_COOKIE[$edit_cookie] == hash('ripemd160', $read_cmt->name . $read_cmt->passwd)) {
-							$user_login = true;
-						}
-					}
-				}
-
 				if (empty($read_cmt->website)) {
-					if (preg_match('/^@([a-zA-Z0-9_@]{1,29}$)/', $read_cmt->name)) {
-						$variable_name = $name_at . '<a rel="nofollow" id="opt-website-' . $permalink . '" href="http://' . ((!preg_match('/@identica/i', $read_cmt->name)) ? 'twitter.com/' : 'identi.ca/') . str_replace(array('@identica', '@'), '', $read_cmt->name) . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
-					} else {
-						$variable_name = preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name));
-					}
+    				$variable_name = $read_cmt->name;
 				} else {
-					$variable_name = $name_at . '<a rel="nofollow" id="opt-website-' . $permalink . '" href="' . $read_cmt->website . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', str_replace('@identica', '<span style="display: none;">@identica</span>', $read_cmt->name)) . '</a>';
+					$variable_name = '<a rel="nofollow" id="opt-website-' . $permalink . '" href="' . $read_cmt->website . '" target="_blank">' . preg_replace('/^@(.*?)$/', '\\1', $read_cmt->name) . '</a>';
 				}
 
 				// Format date and time
@@ -108,7 +80,7 @@
 				}
 
 				// Define "Reply" link with appropriate tooltip
-				if (!empty($read_cmt->email) and $read_cmt['notifications'] == 'yes') {
+				if (!empty($read_cmt->email)) {
 					if (!empty($_COOKIE['email']) and encrypt($_COOKIE['email']) == $read_cmt->email) {
 						$email_indicator = $text['op_cmt_note'] . '" class="no-email"';
 					} else{
@@ -135,51 +107,20 @@
 				// Remove repetitive and trailing HTML <br> tags
 				$clean_code = preg_replace('/^(<br><br>)/', '', preg_replace('/(<br><br>)$/', '', preg_replace('/(<br>){2,}/i', '<br><br>', $clean_code)));
 
-				if ($mode == 'php') {
-					global $variable, $array_count;
-					$variable["$array_count"]['permalink'] = $permalink;
-
-					// Add keys to comments object
-					$variable["$array_count"]['avatar'] = $avatar_icon;
-					$variable["$array_count"]['cmtclass'] = ((preg_match('/r/', $permalink)) ? 'cmtdiv reply' : 'cmtdiv');
-					$variable["$array_count"]['indent'] = (($indention == 'right') ? '16px ' . $indent . 'px 12px 0px' : '16px 0px 12px ' . $indent . 'px');
-					$variable["$array_count"]['name'] = '<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>';
-					if (preg_match("/r/", $permalink)) $variable["$array_count"]['thread'] = '<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>';
-					$variable["$array_count"]['date'] = '<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>';
-					$variable["$array_count"]['sort_name'] = $read_cmt->name;
-					$variable["$array_count"]['sort_date'] = strtotime(str_replace('- ', '', $read_cmt->date));
-					$variable["$array_count"]['notifications'] = $read_cmt['notifications'];
-
-					// Define "Edit" link if proper login cookie set
-					if ($user_login == true or $admin_login == true) {
-						$variable["$array_count"]['edit_link'] = '<a rel="nofollow" href="?hashover_edit=' . $permalink . '#' . $permalink . '" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>';
-					}
-
-					$variable["$array_count"]['reply_link'] = '<a rel="nofollow" href="?hashover_reply=' . $permalink . '#' . $permalink . '" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>';
-					$variable["$array_count"]['comment'] = str_replace('\n', PHP_EOL, $clean_code);
-					$array_count++;
-				} else {
-					// Add keys to comments object
-					$variable .= "\t" . '{' . PHP_EOL;
-					$variable .= "\t\t" . 'permalink: \'' . $permalink . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'cmtclass: \'' . ((preg_match('/r/', $permalink)) ? 'cmtdiv reply' : 'cmtdiv') . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'avatar: \'' . addcslashes($avatar_icon, "'") . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $indent . 'px 12px 0px' : '16px 0px 12px ' . $indent . 'px') . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'name: \'' . addcslashes('<b class="cmtfont' . $name_class . '" id="opt-name-' . $permalink . '">' . $variable_name . '</b>', "'") . '\',' . PHP_EOL;
-					$variable .= (preg_match("/r/", $permalink)) ? "\t\t" . 'thread: \'' . addcslashes('<a rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . '</a>', "'") . '\',' . PHP_EOL : '';
-					$variable .= "\t\t" . 'date: \'' . addcslashes('<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>', "'") . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'sort_name: \'' . addcslashes($read_cmt->name, "'") . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'sort_date: ' . '\'' . strtotime(str_replace('- ', '', $read_cmt->date)) . '\',' . PHP_EOL;
-
-					// Define "Edit" link if proper login cookie set
-					if ($user_login == true or $admin_login == true) {
-						$variable .= "\t\t" . 'edit_link: \'' . addcslashes('<a rel="nofollow" href="#" onClick="editcmt(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\', \'' . (($read_cmt['notifications'] != 'no') ? '1' : '0') . '\'); return false;" title="' . $text['edit_your_cmt'] . '" class="edit">Edit</a>', "'") . '\',' . PHP_EOL;
-					}
-
-					$variable .= "\t\t" . 'reply_link: \'' . addcslashes('<a rel="nofollow" href="#" onClick="reply(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); return false;" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>', "'") . '\',' . PHP_EOL;
-					$variable .= "\t\t" . 'comment: \'' . addcslashes($clean_code, "'") . '\'' . PHP_EOL;
-					$variable .= "\t" . '},' . PHP_EOL . PHP_EOL;
-				}
+                // Add keys to comments object
+                $variable .= "\t" . '{' . PHP_EOL;
+                $variable .= "\t\t" . 'permalink: \'' . $permalink . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'cmtclass: \'' . ((preg_match('/r/', $permalink)) ? 'cmtdiv reply' : 'cmtdiv') . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'avatar: \'' . addcslashes($avatar_icon, "'") . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'indent: \'' . (($indention == 'right') ? '16px ' . $indent . 'px 12px 0px' : '16px 0px 12px ' . $indent . 'px') . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'name: \'' . addcslashes('<span class="cmtfont cmtfontid">#' . str_replace('_pop', '', $permalink) . '</span> <b class="cmtfont" id="opt-name-' . $permalink . '">' . $variable_name . '</b>', "'") . '\',' . PHP_EOL;
+                $variable .= (preg_match("/r/", $permalink)) ? "\t\t" . 'thread: \'' . addcslashes('<a class="cmtfont" rel="nofollow" href="#' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '" title="' . $text['thread_tip'] . '" style="float: right;">' . $text['thread'] . ' ' . preg_replace('/^(.*)r.*$/', '\\1', $permalink) . '</a>', "'") . '\',' . PHP_EOL : '';
+                $variable .= "\t\t" . 'date: \'' . addcslashes('<a rel="nofollow" href="#' . str_replace('_pop', '', $permalink) . '" title="Permalink">' . $cmt_date . '</a>', "'") . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'sort_name: \'' . addcslashes($read_cmt->name, "'") . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'sort_date: ' . '\'' . strtotime(str_replace('- ', '', $read_cmt->date)) . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'reply_link: \'' . addcslashes('<a rel="nofollow" href="#" onClick="reply(\'' . $permalink . '\', \'' . basename($file, '.xml') . '\'); return false;" title="' . $text['reply_to_cmt'] . ' - ' . $email_indicator . '>Reply</a>', "'") . '\',' . PHP_EOL;
+                $variable .= "\t\t" . 'comment: \'' . addcslashes($clean_code, "'") . '\'' . PHP_EOL;
+                $variable .= "\t" . '},' . PHP_EOL . PHP_EOL;
 			}
 		}
 

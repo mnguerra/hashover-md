@@ -1,6 +1,7 @@
 <?php
 
-	// Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -22,29 +23,6 @@
 	// Clean up name, set name cookie
 	if (isset($_POST['name']) and trim($_POST['name'], ' ') != '' and $_POST['name'] != $text['nickname']) {
 		$name = substr(str_replace($search, $replace, $_POST['name']), 0, 30);
-
-		if (isset($_POST['edit'])) {
-			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password)) {
-				setcookie('name', $name, $expire, '/', str_replace('www.', '', $domain));
-			}
-		} else {
-			if (!isset($_POST['delete'])) {
-				setcookie('name', $name, $expire, '/', str_replace('www.', '', $domain));
-			}
-		}
-	}
-
-	// Set password cookie
-	if (isset($_POST['password']) and (!empty($_POST['password']) and $_POST['password'] != $text['password'])) {
-		if (isset($_POST['edit'])) {
-			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password)) {
-				setcookie('password', str_replace('"', '&quot;', stripslashes($_POST['password'])), $expire, '/', str_replace('www.', '', $domain));
-			}
-		} else {
-			if (!isset($_POST['delete'])) {
-				setcookie('password', str_replace('"', '&quot;', stripslashes($_POST['password'])), $expire, '/', str_replace('www.', '', $domain));
-			}
-		}
 	}
 
 	// Default email headers
@@ -56,7 +34,7 @@
 		$header = (trim($_POST['email'], ' ') != '') ? "From: $email\r\nReply-To: $email" : $header;
 
 		if (isset($_POST['edit'])) {
-			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password)) {
+			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname)) {
 				setcookie('email', $email, $expire, '/', str_replace('www.', '', $domain));
 			}
 		} else {
@@ -69,17 +47,7 @@
 	// Clean up web address, set website cookie
 	if (isset($_POST['website']) and trim($_POST['website'], ' ') != '' and $_POST['website'] != $text['website']) {
 		$website = str_replace($search, $replace, $_POST['website']);
-		$website = (!preg_match('/htt[p|ps]:\/\//i', $website)) ? 'http://' . $website : $website;
-
-		if (isset($_POST['edit'])) {
-			if (!isset($_POST['delete']) and ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password)) {
-				setcookie('website', $website, $expire, '/', str_replace('www.', '', $domain));
-			}
-		} else {
-			if (!isset($_POST['delete'])) {
-				setcookie('website', $website, $expire, '/', str_replace('www.', '', $domain));
-			}
-		}
+		$website = (!preg_match('/^https?:\/\//i', $website)) ? 'http://' . $website : $website;
 	}
 
 	function sanitize($query) {
@@ -93,33 +61,6 @@
 		return $string;
 	}
 
-	// Delete comment
-	if (isset($_POST['delete']) and (isset($_POST['password']) and !empty($_POST['password']))) {
-		if (file_exists($dir . '/' . $_POST['cmtfile'] . '.xml')) {
-			$del_file = $dir . '/' . sanitize($_POST['cmtfile'] . '.xml');
-			$get_pass = simplexml_load_file($del_file);
-		} else {
-			exit(header('Location: ' . $kickback . '#comments'));
-		}
-
-		// Check if password matches the one in the file
-		if (md5(encrypt(stripslashes($_POST['password']))) == $get_pass->passwd or ($_COOKIE['name'] == $admin_nickname and $_COOKIE['password'] == $admin_password)) {
-			unlink($del_file); // Delete the comment file
-			setcookie('password', str_replace('"', '&quot;', $_POST['password']), $expire, '/', str_replace('www.', '', $domain));
-			read_comments($dir, 'no'); // Read comments without output
-
-			// Kick visitor back to comment
-			if (file_exists($dir . '/' . ($_POST['cmtfile'] + 1) . '.xml') or file_exists($dir . '/' . $_POST['cmtfile'] . '-1.xml')) {
-				exit(header('Location: ' . $kickback . '#c' . str_replace('-', 'r', $_POST['cmtfile'])));
-			} else {
-				setcookie('message', $text['cmt_deleted'], $expire, '/', str_replace('www.', '', $domain));
-				exit(header('Location: ' . $kickback . '#comments'));
-			}
-		} else {
-			exit(header('Location: ' . $kickback . '#c' . str_replace('-', 'r', $_POST['cmtfile'])));
-		}
-	}
-
 	// Check trap fields
 	if (!empty($_POST['summary'])) $is_spam = true;
 	if (!empty($_POST['middlename'])) $is_spam = true;
@@ -129,12 +70,6 @@
 
 	// Check if a comment has been entered, clean comment, replace HTML, create hyperlinks
 	if (!isset($is_spam) and isset($_POST['comment']) and !isset($_POST['delete'])) {
-		if (isset($_POST['login'])) {
-			setcookie('hashover-' . strtolower(str_replace(' ', '-', $name)), hash('ripemd160', xml_sanitize(trim($name, ' ')) . ((isset($_POST['password']) and !empty($_POST['password']) and $_POST['password'] != $text['password']) ? md5(encrypt(stripslashes($_POST['password']))) : '')), $expire, '/', str_replace('www.', '', $domain));
-			setcookie('message', $text['logged_in'], $expire, '/', str_replace('www.', '', $domain));
-			exit(header('Location: ' . $kickback . '#comments'));
-		}
-
 		if (!empty($_POST['comment']) and trim($_POST['comment'], " \r\n") != '' and (!preg_match('/' . str_replace(array('(', ')'), array('\(', '\)'), $text['comment_form']) . '/i', $_POST['comment']) and !preg_match('/' . str_replace(array('(', ')'), array('\(', '\)'), $text['reply_form']) . '/i', $_POST['comment']))) {
 			// Characters to search for and replace with in comments
 			$data_search = array('\\', '"', '<', '>', "\n\r", "\n", "\r", '  ', '&lt;b&gt;', '&lt;/b&gt;', '&lt;u&gt;', '&lt;/u&gt;', '&lt;i&gt;', '&lt;/i&gt;', '&lt;s&gt;', '&lt;/s&gt;', '&lt;pre&gt;', '&lt;/pre&gt;', '&lt;code&gt;', '&lt;/code&gt;', '&lt;ul&gt;', '&lt;/ul&gt;', '&lt;ol&gt;', '&lt;/ol&gt;', '&lt;li&gt;', '&lt;/li&gt;', '&lt;blockquote&gt;', '&lt;/blockquote&gt;');
@@ -179,40 +114,25 @@
 
 			// Open comment template; prepare data
 			$write_cmt = simplexml_load_file('template.xml');
-			$write_cmt->name = xml_sanitize(trim($name, ' '));
-			$write_cmt->passwd = (!empty($_POST['password']) and !empty($_POST['password']) and $_POST['password'] != $text['password']) ? md5(encrypt(stripslashes($_POST['password']))) : '';
-			$write_cmt->email = (!empty($email) and $email != $text['email']) ? str_replace('"', '&quot;', encrypt(stripslashes(xml_sanitize($email)))) : '';
-			$write_cmt->website = (!empty($website)) ? xml_sanitize(trim($website, ' ')) : '';
+
+            if ($name != $admin_nickname) {
+    			$write_cmt->name = xml_sanitize(trim($name, ' '));
+                $write_cmt->email = (!empty($email) and $email != $text['email']) ? str_replace('"', '&quot;', encrypt(stripslashes(xml_sanitize($email)))) : '';
+                $write_cmt->website = (!empty($website)) ? xml_sanitize(trim($website, ' ')) : '';
+            } else {
+    			$write_cmt->name = $admin_name;
+    			$write_cmt->email = encrypt($notification_email);
+    			// set protocol (http or https) of home server
+                $ssl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                    || ($_SERVER['SERVER_PORT'] ?? 443) == 443
+                    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+    			$proto = strtolower($_SERVER['SERVER_PROTOCOL']);
+                $proto = substr($proto, 0, strpos($proto, '/')) . ($ssl ? 's' : '' );
+                $write_cmt->website = xml_sanitize($proto . '://' . $domain);
+            }
+
 			$write_cmt->date = date('m/d/Y - g:ia');
-			$write_cmt['notifications'] = 'yes';
-			$write_cmt['ipaddr'] = ($ip_addrs == 'yes') ? $_SERVER['REMOTE_ADDR'] : '';
 			$write_cmt->body = xml_sanitize($clean_code); // Final comment body
-
-			// Edit comment
-			if (isset($_POST['edit']) and (isset($_POST['password']) and isset($_POST['cmtfile'])) and !isset($_POST['delete'])) {
-				if (file_exists($dir . '/' . $_POST['cmtfile'] . '.xml')) {
-					$edit_cmt = simplexml_load_file($dir . '/' . sanitize($_POST['cmtfile'] . '.xml'));
-
-					// Check if password matches the one in the file
-					if (md5(encrypt(stripslashes($_POST['password']))) == $edit_cmt->passwd or ($_COOKIE['name'] == $admin_nickname and $_COOKIE['password'] == $admin_password)) {
-						// Write edited comment to file
-						$edit_cmt->name = $write_cmt->name;
-						if ($_COOKIE['name'] != $admin_nickname and $_COOKIE['password'] != $admin_password) $edit_cmt->email = $write_cmt->email;
-						$edit_cmt->website = $write_cmt->website;
-						$edit_cmt['notifications'] = (isset($_POST['notify']) and $_POST['notify'] == 'on') ? 'yes' : 'no';
-						if ($_POST['password'] != $admin_password) $edit_cmt->passwd = $write_cmt->passwd;
-						if ($clean_code != $edit_cmt->body) $edit_cmt->body = $write_cmt->body;
-						$edit_cmt->asXML($dir . '/' . sanitize($_POST['cmtfile']) . '.xml');
-
-						// Set "Password" and "Login" cookies
-						setcookie('password', str_replace('"', '&quot;', stripslashes($_POST['password'])), $expire, '/', str_replace('www.', '', $domain));
-						setcookie('hashover-' . strtolower(str_replace(' ', '-', $name)), hash('ripemd160', $write_cmt->name . $write_cmt->passwd), $expire, '/', str_replace('www.', '', $domain));
-					}
-				}
-
-				// Kick visitor back to comment
-				exit(header('Location: ' . $kickback . '#c' . str_replace('-', 'r', $_POST['cmtfile'])));
-			}
 
 			// Read comments without output
 			read_comments($dir, 'no');
@@ -230,6 +150,10 @@
 			}
 
 			// Write comment to file
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);   // true = crea també 'pages/' si falta
+            }
+
 			if ($write_cmt->asXML(sanitize($cmt_file))) {
 				chmod($cmt_file, 0600);
 

@@ -1,6 +1,7 @@
 <?php
 
-	// Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -15,9 +16,9 @@
 	//	You should have received a copy of the GNU Affero General Public License
 	//	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	//
-	//--------------------
+	//  --------------------
 	//
-	// Script Description:
+	//  Script Description:
 	//
 	//	Free / Open Source PHP comment system intended to replace Disqus. 
 	//	Allows completely anonymous comments to be posted, the only 
@@ -27,12 +28,12 @@
 	//	comment, "1-2.xml" is the second reply, and so on.
 	//
 	//	Features restricted use of HTML tags, automatic URL links, avatar 
-	//	icons, replies, comment editing and deletion, notification emails, 
+	//	icons, replies, notification emails,
 	//	customizable CSS, referrer checking, permalinks, and more!
 	//
-	//--------------------
+	//  --------------------
 	//
-	// Change Log:
+	//  Change Log:
 	//
 	//	Please record your modifications to code:
 	//	/hashover-md/changelog.txt
@@ -46,27 +47,17 @@
 	// Use UTF-8 character set
 	ini_set ('default_charset', 'UTF-8');
 
-	// Enable display of PHP errors
-	//ini_set ('display_errors', true);
-	//error_reporting (E_ALL);
-
 	// Script execution starting time
 	$exec_time = explode(' ', microtime());
 	$exec_start = $exec_time[1] + $exec_time[0];
 
 	// Output for JavaScript mode
 	function jsAddSlashes($script, $type = '') {
-		global $mode;
-
-		if (!isset($mode) or $mode == 'javascript') {
-			if ($type != 'single') {
-				return 'show_cmt += \'' . str_replace(array('\\\n', '\\\r', '\\\\n', "\'+", "+\'", "\t"), array('\n', '\r', '\\n', "'+", "+'", ''), addcslashes($script, "'")) . '\';' . PHP_EOL;
-			} else {
-				return 'document.write("' . str_replace(array('\\\n', '\\\r', '\"+', '+\"'), array('\n', '\r', '"+', '+"'), addslashes($script)) . '");' . PHP_EOL;
-			}
-		} else {
-			return str_replace(array('\n', '\r'), '', $script) . PHP_EOL;
-		}
+        if ($type != 'single') {
+            return 'show_cmt += \'' . str_replace(array('\\\n', '\\\r', '\\\\n', "\'+", "+\'", "\t"), array('\n', '\r', '\\n', "'+", "+'", ''), addcslashes($script, "'")) . '\';' . PHP_EOL;
+        } else {
+            return 'document.write("' . str_replace(array('\\\n', '\\\r', '\"+', '+\"'), array('\n', '\r', '"+', '+"'), addslashes($script)) . '");' . PHP_EOL;
+        }
 	}
 
 	if (version_compare(PHP_VERSION, '5.3.3') < 0) {
@@ -88,7 +79,7 @@
 	}
 
 	// Exit if encryption key, notification email, or administrative nickname or password set to defaults
-	if ($encryption_key == '8CharKey' || $notification_email == 'example@example.com' || $admin_nickname == 'admin' || $admin_password == 'passwd') {
+	if ($encryption_key == '8CharKey' || $notification_email == 'example@example.com' || $admin_nickname == 'admin') {
 		exit(jsAddSlashes('<b>HashOver-md:</b> The variable values in /hashover/scripts/secrets.php need to be UNIQUE.', 'single'));
 	}
 
@@ -102,17 +93,11 @@
 	}
 
 	// Check user's IP address against stopforumspam.com
-	if ($spam_IP_check == 'both') {
-		if (preg_match('/yes/', file_get_contents('http://www.stopforumspam.com/api?ip=' . $_SERVER['REMOTE_ADDR']))) {
-			exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
-		}
-	} else {
-		if ($spam_IP_check == $mode) {
-			if (preg_match('/yes/', file_get_contents('http://www.stopforumspam.com/api?ip=' . $_SERVER['REMOTE_ADDR']))) {
-				exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
-			}
-		}
-	}
+    if ($spam_IP_check == "yes") {
+        if (preg_match('/yes/', file_get_contents('http://www.stopforumspam.com/api?ip=' . $_SERVER['REMOTE_ADDR']))) {
+            exit(jsAddSlashes('<b>HashOver-md:</b> You are blocked!', 'single'));
+        }
+    }
 
 	// Get use avatar URL by hash
 	function get_user_avatar ($hash) {
@@ -140,7 +125,6 @@
 
     array_push($include_files,
         './scripts/parse_comments.php',
-        './scripts/deletion_notice.php',
         './scripts/read_comments.php',
         './scripts/write_comments.php'
     );
@@ -149,13 +133,6 @@
 	foreach ($include_files as $script) {
 		if (!include($script)) {
 			exit(jsAddSlashes('<b>HashOver-md - Error:</b> "' . $script . '" file could not be included!', 'single'));
-		}
-	}
-
-	// Create comment thread directory & error on fail
-	if (!file_exists($dir) and !isset($_GET['count_link'])) {
-		if (!mkdir($dir, 0755) and !chmod($dir, 0755)) {
-			exit(jsAddSlashes('<b>HashOver-md - Error:</b> Failed to create comment thread directory at "' . $dir . '"', 'single'));
 		}
 	}
 
@@ -170,18 +147,13 @@
 
 	// Function for displaying comment count
 	function display_count() {
-		global $cmt_count, $total_count, $deleted_cmt, $deleted_total, $count_missing;
+		global $cmt_count, $total_count;
 
 		$cmt_count--;
 		$total_count--;
 
 		$cmt_copy = $cmt_count;
 		$total_copy = $total_count;
-
-		if ($count_missing == 'no') {
-			$cmt_copy -= $deleted_cmt;
-			$total_copy -= $deleted_total;
-		}
 
 		if ($total_copy == $cmt_copy) {
 			$show_count = $cmt_copy . ' comentari';

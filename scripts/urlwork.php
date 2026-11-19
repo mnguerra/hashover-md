@@ -1,6 +1,7 @@
 <?php
 
-	// Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -26,41 +27,29 @@
 	}
 
 	// Get full page URL or Canonical URL
-	if ($mode == 'javascript') {
-		if (isset($_SERVER['HTTP_REFERER'])) {
-			$url_parts = parse_url($_SERVER['HTTP_REFERER']);
-			$url_host = '';
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $url_parts = parse_url($_SERVER['HTTP_REFERER']);
+        $url_host = '';
 
-			// Construct host URL
-			if (!empty($url_parts['host'])) {
-				$url_host .= $url_parts['host'];
+        // Construct host URL
+        if (!empty($url_parts['host'])) {
+            $url_host .= $url_parts['host'];
 
-				// Add optional port to URL
-				if (!empty($url_parts['port'])) {
-					$url_host .= ':' . $url_parts['port'];
-				}
-			}
+            // Add optional port to URL
+            if (!empty($url_parts['port'])) {
+                $url_host .= ':' . $url_parts['port'];
+            }
+        }
 
-			// Check if the script was requested by this server
-			if (!preg_match('/' . $domain . '/i', $url_host)) {
-				exit(jsAddSlashes('<b>HashOver-md - Error:</b> External use not allowed.', 'single'));
-			}
+        // Check if the script was requested by this server
+        if (!preg_match('/' . $domain . '/i', $url_host)) {
+            exit(jsAddSlashes('<b>HashOver-md - Error:</b> External use not allowed.', 'single'));
+        }
 
-			$page_url = (empty($canon_url)) ? $_SERVER['HTTP_REFERER'] : $canon_url;
-		} else {
-            exit(jsAddSlashes('<b>HashOver-md - Error:</b> No way to get page URL, HTTP referrer not set.', 'single'));
-		}
-	} else {
-		if (empty($canon_url)) {
-			$page_url = 'http://' . $domain . $_SERVER['REQUEST_URI'];
-		} else {
-			$page_url = $canon_url;
-
-			if (!empty($_GET['hashover_reply']) or !empty($_GET['hashover_edit'])) {
-				$page_url .= (!empty($_GET['hashover_reply'])) ? '?hashover_reply=' . $_GET['hashover_reply'] : '?hashover_edit=' . $_GET['hashover_edit'];
-			}
-		}
-	}
+        $page_url = (empty($canon_url)) ? $_SERVER['HTTP_REFERER'] : $canon_url;
+    } else {
+        exit(jsAddSlashes('<b>HashOver-md - Error:</b> No way to get page URL, HTTP referrer not set.', 'single'));
+    }
 
 	// Set URL to "count_link" query value
 	if (isset($script_query)) {
@@ -125,10 +114,6 @@
 	$ref_path = trim($ref_path, '-');
 
 	// Page comments directory
-	if ($ref_path != 'hashover-php') {
-		$dir = 'pages/' . $ref_path;
-	} else {
-		exit(jsAddSlashes('<b>HashOver-md - Error:</b> Failure setting comment directory name'));
-	}
+	$dir = 'comments/' . $ref_path;
 
 ?>

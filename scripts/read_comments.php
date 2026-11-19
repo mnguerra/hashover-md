@@ -1,6 +1,7 @@
 <?php
 
-	// Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2014-2019 Jacob Barkdull
+	//  Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -18,7 +19,7 @@
 
 	// Read, count, and create deleted comment note
 	function read_comments($dir, $check) {
-		global $root_dir, $show_cmt, $cmt_count, $total_count, $subfile_count, $deleted_files, $domain, $script_query, $template, $icon_size;
+		global $root_dir, $show_cmt, $cmt_count, $total_count, $subfile_count, $domain, $script_query, $template, $icon_size;
 		$files = array();
 
 		// Read directory contents, put filenames in array, count files
@@ -39,15 +40,6 @@
 			$cmt_tree = '';
 
 			foreach (explode('-', basename($file, '.xml')) as $reply) {
-				for ($i = 1; $i <= $reply; $i++) {
-					if (!in_array($dir . '/' . $cmt_tree . ((!empty($cmt_tree) ? '-' : '') . $i) . '.xml', $files)) {
-						if (!in_array($dir . '/' . $cmt_tree . ((!empty($cmt_tree) ? '-' : '') . $i) . '.xml', $deleted_files)) {
-							deletion_notice($dir . '/' . $cmt_tree . ((!empty($cmt_tree) ? '-' : '') . $i) . '.xml', $show_cmt, $check); // Display notice
-							$deleted_files[] = $dir . '/' . $cmt_tree . ((!empty($cmt_tree) ? '-' : '') . $i) . '.xml';
-						}
-					}
-				}
-
 				$cmt_tree .= ((!empty($cmt_tree) ? '-' : '')) . $reply;
 			}
 

@@ -1,6 +1,7 @@
 <?php
 
 	// Copyright (C) 2014-2019 Jacob Barkdull
+	// Copyright (C) 2026 Manel Guerra
 	//
 	//	This program is free software: you can redistribute it and/or modify
 	//	it under the terms of the GNU Affero General Public License as
@@ -59,7 +60,7 @@ if (rows	== undefined) { var rows	=  '<?php echo $rows; ?>'; }
 if (name_on	== undefined) { var name_on	=  'yes'; }
 if (email_on	== undefined) { var email_on	=  'yes'; }
 if (sites_on	== undefined) { var sites_on	=  'yes'; }
-if (passwd_on	== undefined) { var passwd_on	=  'yes'; }
+//if (passwd_on	== undefined) { var passwd_on	=  'yes'; }
 
 // Add comment stylesheet to page header
 var head = document.getElementsByTagName('head')[0];
@@ -84,7 +85,7 @@ if (document.getElementById('cmtcount') != null) {
 function reply(r, f) {
 	var form_html = '\n<span class="optionbuttons" style="float: right;">\n';
 
-	if (name_on == 'yes' || email_on == 'yes' || passwd_on == 'yes' || sites_on == 'yes') {
+	if (name_on == 'yes' || email_on == 'yes' || sites_on == 'yes') {
 		form_html += '<?php echo (isset($_COOKIE['name']) and !empty($_COOKIE['name'])) ? '<input type="button" value="&#x25BC; ' . $text['options'] . '" onClick="options(' . "\''+r+'\'" . '); this.value = (this.value == \\\'&#x25BC; ' . $text['options'] . '\\\') ? \\\'&#x25B2; ' . $text['options'] . '\\\' : \\\'&#x25BC; ' . $text['options'] . '\\\'; return false;">' : ''; ?>\n';
 	}
 
@@ -105,9 +106,6 @@ function reply(r, f) {
 		form_html += '<td>\n<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : ''; ?>" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n</td>\n';
 	}
 
-	if (passwd_on == 'yes') {
-		form_html += '<td>\n<input type="password" name="password" title="<?php echo $text['password_tip']; ?>" class="opt-password" placeholder="<?php echo $text['password']; ?>">\n</td>\n';
-	}
 	<?php if ($is_mobile == 'yes') echo 'form_html += \'</tr>\n<tr>\n\';'; ?>
 
 	if (email_on == 'yes') {
@@ -132,53 +130,6 @@ function reply(r, f) {
 	return false;
 }
 
-// Displays edit form
-function editcmt(e, f, s) {
-	var cmtdata = document.getElementById('cmtdata-' + e).innerHTML.replace(/<br>/gi, '\n').replace(/<\/?a(\s+.*?>|>)/gi, '').replace(/<img.*?title="(.*?)".*?>/gi, '[img]$1[/img]').replace(/^\s+|\s+$/g, '').replace('<code style="white-space: pre;">', '<code>');
-	var website = (document.getElementById('opt-website-' + e) != undefined) ? document.getElementById('opt-website-' + e).href : '';
-	document.getElementById('cmtopts-' + e).style.display = 'none';
-
-	document.getElementById('cmtforms-' + e).innerHTML = '\n<span class="optionbuttons" style="float: right;">\n\
-	<input type="submit" name="edit" value="." style="display: none;">\
-	<input type="submit" name="delete" class="delete" value="<?php echo $text['delete']; ?>" onClick="return delwarn();">\n\
-	<label for="notify" title="<?php echo $text['subscribe_tip']; ?>">\n\
-	<input type="checkbox"' + ((s != '0') ? ' checked="true"' : '') + ' id="notify" name="notify"> <?php echo $text['subscribe']; ?>\n\
-	</label>\n\
-	<input type="button" value="<?php echo $text['cancel']; ?>" onClick="cancelform(\''+e+'\'); return false;">\n\
-	</span>\n\
-	<b class="cmtfont"><?php echo $text['edit_cmt']; ?></b>\n\
-	<span class="options"><hr style="clear: both;">\n\
-	<table width="100%" cellpadding="0" cellspacing="0">\n\
-	<tbody>\n<tr>\n\
-<?php if ($icons == 'yes') { ?>
-	<td width="1%" rowspan="2">\n\
-	<?php echo $avatar_image; ?>\n\
-	</td>\n\
-<?php } ?>
-	<td>\n\
-	<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="' + document.getElementById('opt-name-' + e).innerHTML.replace(/<.*?>(.*?)<.*?>/gi, '$1') + '" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n\
-	</td>\n\
-	<td>\n\
-	<input type="password" name="password" title="<?php echo $text['password_tip']; ?>" class="opt-password" placeholder="<?php echo $text['password']; ?>">\n\
-	</td>\n\
-<?php if ($is_mobile == 'yes') echo "\t" . '</tr>\n<tr>\n\\'; ?>
-	<td>\n\
-	<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="opt-email" placeholder="<?php echo $text['email']; ?>">\n\
-	</td>\n\
-	<td>\n\
-	<input type="text" name="website" title="<?php echo $text['website']; ?>" value="' + website + '" class="opt-website" placeholder="<?php echo $text['website']; ?>">\n\
-	</td>\n\
-	</tr>\n\
-	</tbody>\n</table>\n</span>\n\
-	<textarea rows="10" cols="62" name="comment" style="width: 100%;" title="<?php echo $text['cmt_tip']; ?>">' + cmtdata + '</textarea><br>\n\
-	<input class="post_cmt" type="submit" name="edit" value="<?php echo $text['save_edit']; ?>" style="width: 100%;">\n\
-	<input type="hidden" name="cmtfile" value="' + f + '">\n\<?php
-	echo (isset($_GET['canon_url']) or isset($canon_url)) ? "\n\t" . '<input type="hidden" name="canon_url" value="' . $page_url . '">\n\\' . PHP_EOL : PHP_EOL; ?>';
-
-	document.getElementById('reply_form-' + e).comment.focus ();
-	return false
-}
-
 // Function to cancel reply and edit forms
 function cancelform(f) {
 	document.getElementById('cmtopts-' + f).style.display = '';
@@ -188,7 +139,7 @@ function cancelform(f) {
 
 // Displays options
 function options(r) {
-	if (name_on == 'yes' || email_on == 'yes' || passwd_on == 'yes' || sites_on == 'yes') {
+	if (name_on == 'yes' || email_on == 'yes' || sites_on == 'yes') {
 		if (document.getElementById('options-' + r).style.maxHeight != '200px') {
 			document.getElementById('options-' + r).style.maxHeight = '200px';
 		} else {
@@ -224,15 +175,6 @@ function noemailreply(f) {
 	}
 }
 
-// Displays confirmation dialog for deletion
-function delwarn() {
-	var answer = confirm('<?php echo $text['delete_cmt']; ?>');
-
-	if (answer == false) {
-		return false;
-	}
-}
-
 // Get page title
 if (document.title != '') {
 	var pagetitle = ' <?php echo $text['published_on']; ?> "'+document.title+'"';
@@ -245,45 +187,38 @@ var show_cmt = '';
 function parse_template(object, sort, method) {
 	var indent = (sort == false || method == 'ascending') ? object['indent'] : '16px 0px 12px 0px';
 
-	if (!object['deletion_notice']) {
-		var 
-			root_dir = '<?php echo addcslashes($root_dir, "'"); ?>',
-			permalink = object['permalink'],
-			cmtclass = (sort == false || method == 'ascending') ? object['cmtclass'] : 'cmtdiv',
-			avatar = object['avatar'],
-			name = object['name'],
-			thread = (object['thread']) ? object['thread'] : '',
-			date = object['date'],
-			edit_link = (object['edit_link']) ? object['edit_link'] : '',
-			reply_link = object['reply_link'],
-			comment = object['comment'],
-			form = '',
-			cmtopts_style = ''
-		;
+    var
+        root_dir = '<?php echo addcslashes($root_dir, "'"); ?>',
+        permalink = object['permalink'],
+        cmtclass = (sort == false || method == 'ascending') ? object['cmtclass'] : 'cmtdiv',
+        avatar = object['avatar'],
+        name = object['name'],
+        thread = (object['thread']) ? object['thread'] : '',
+        date = object['date'],
+        edit_link = (object['edit_link']) ? object['edit_link'] : '',
+        reply_link = object['reply_link'],
+        comment = object['comment'],
+        form = '',
+        cmtopts_style = ''
+    ;
 
 <?php
-		// Load HTML template
-		$html_template = file_get_contents('html-templates/' . $template . '.html');
+    // Load HTML template
+    $html_template = file_get_contents('html-templates/' . $template . '.html');
 
-		// Convert HTML template line endings to system style
-		$newline_search = array("\r\n", "\r", "\n");
-		$newline_replace = array("\n", "\n", PHP_EOL);
-		$html_template = str_replace($newline_search, $newline_replace, $html_template);
+    // Convert HTML template line endings to system style
+    $newline_search = array("\r\n", "\r", "\n");
+    $newline_replace = array("\n", "\n", PHP_EOL);
+    $html_template = str_replace($newline_search, $newline_replace, $html_template);
 
-		// Break HTML template into individual lines
-		$template_lines = explode(PHP_EOL, $html_template);
+    // Break HTML template into individual lines
+    $template_lines = explode(PHP_EOL, $html_template);
 
-		// Echo each line as JavaScript variable addition
-		for ($line = 0, $line_length = count($template_lines); $line < $line_length; $line++) {
-			echo "\t\t" . 'show_cmt += \'' . $template_lines[$line] . '\n\';' . PHP_EOL;
-		}
+    // Echo each line as JavaScript variable addition
+    for ($line = 0, $line_length = count($template_lines); $line < $line_length; $line++) {
+        echo "\t\t" . 'show_cmt += \'' . $template_lines[$line] . '\n\';' . PHP_EOL;
+    }
 ?>
-	} else {
-		show_cmt += '<a name="' + object['permalink'] + '"></a>\n';
-		show_cmt += '<div style="margin: ' + indent + '; clear: both;" class="' + object['cmtclass'] + '">\n';
-		show_cmt += object['deletion_notice'] + '\n';
-		show_cmt += '</div>\n';
-	}
 }
 
 function sort_comments(method) {
@@ -405,23 +340,6 @@ function sort_comments(method) {
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
 
-	// Display password input tag if told to
-	echo "if (passwd_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td>\n');
-	echo "\t" . jsAddSlashes('<input type="password" name="password" title="' . $text['password_tip'] . '"' . (isset($_COOKIE['password']) ? ' value="' . $_COOKIE['password'] . '"' : '') . ' class="opt-password" placeholder="' . $text['password'] . '">\n');
-	echo "\t" . jsAddSlashes('</td>\n');
-	echo "}\n\n";
-
-	// Add second table row on mobile devices
-	if ($is_mobile == 'yes') {
-		echo "if (name_on == 'yes' && passwd_on == 'yes') {\n";
-		echo "\t" . jsAddSlashes('<td width="1%">\n');
-		echo "\t" . jsAddSlashes('<input name="login" title="Login (optional)" class="opt-login" type="submit" value="">\n');
-		echo "\t" . jsAddSlashes('</td>\n');
-		echo "}\n\n";
-		echo jsAddSlashes('</tr>\n<tr>\n');
-	}
-
 	// Display email input tag if told to
 	echo "if (email_on == 'yes') {\n";
 	echo "\t" . jsAddSlashes('<td>\n');
@@ -436,13 +354,6 @@ function sort_comments(method) {
 	echo "\t" . jsAddSlashes('</td>\n');
 	echo "}\n\n";
 
-	if ($is_mobile != 'yes') {
-		echo "if (name_on == 'yes' && passwd_on == 'yes') {\n";
-		echo "\t" . jsAddSlashes('<td width="1%">\n');
-		echo "\t" . jsAddSlashes('<input name="login" title="Login (optional)" class="opt-login" type="submit" value="">\n');
-		echo "\t" . jsAddSlashes('</td>\n');
-		echo "}\n\n";
-	}
 	echo jsAddSlashes('</tr>\n</tbody>\n</table>\n') . PHP_EOL;
 
 	echo jsAddSlashes('<div id="requiredFields" style="display: none;">\n');
@@ -457,7 +368,7 @@ function sort_comments(method) {
 	$replyborder = (isset($_COOKIE['success']) and $_COOKIE['success'] == "no") ? ' border: 2px solid #FF0000 !important; -moz-border-radius: 5px 5px 0px 0px; border-radius: 5px 5px 0px 0px;' : '';
 
 	echo jsAddSlashes('<textarea rows="' . $rows . '" cols="63" name="comment" placeholder="' . $text['comment_form'] . '" style="width: 100%;' . $replyborder . '" title="' . $text['cmt_tip'] . '"></textarea><br>\n');
-	echo jsAddSlashes('<input class="post_cmt" type="submit" value="' . $text['post_button'] . '" style="width: 100%;" onClick="return noemail();" onsubmit="return noemail();"><br>\n');
+    echo jsAddSlashes('<input class="post_cmt" type="submit" value="' . $text['post_button'] . '" style="width: 100%;" onClick="return noemail();" onsubmit="return noemail();"><br>\n');
 	echo (isset($_GET['canon_url']) or isset($canon_url)) ? jsAddSlashes('<input type="hidden" name="canon_url" value="' . $page_url . '">\n') : '';
 	echo (isset($_COOKIE['replied'])) ? jsAddSlashes('<input type="hidden" name="reply_to" value="' . $_COOKIE['replied'] . '">\n') : '';
 	echo jsAddSlashes('</div>\n</form>\n'). PHP_EOL;

@@ -1,15 +1,18 @@
 <?php
 
 	// Copyright (C) 2014-2019 Jacob Barkdull
+	// Copyright (C) 2026 Manel Guerra
 	//
-	//	I, Jacob Barkdull, hereby release this work into the public domain. 
-	//	This applies worldwide. If this is not legally possible, I grant any 
-	//	entity the right to use this work for any purpose, without any 
+	//	Jacob Barkdull released this work into the public domain.
+	//	Manel Guerra likewise releases this modified version into the
+	//	public domain.
+	//	This applies worldwide. If this is not legally possible, we grant any
+	//	entity the right to use this work for any purpose, without any
 	//	conditions, unless such conditions are required by law.
 	//
-	//--------------------
+	//  --------------------
 	//
-	// IMPORTANT:
+	//  IMPORTANT:
 	//
 	//	To maintain proper functionality when downloading or otherwise 
 	//	upgrading to a new version of HashOver-md, it is important that you
@@ -24,18 +27,18 @@
 	//	service(s), and/or political ideology.
 
 
-	$encryption_key		= '8CharKey';			// Unique 8 to 32 character encryption key
+	$encryption_key		= '8CharKey';			    // Unique 8 to 32 character encryption key
 	$notification_email	= 'example@example.com';	// E-mail for notification of new comments
-	$admin_nickname		= 'admin';			// Nickname with admin rights (must be title-cased)
-	$admin_password		= 'passwd';			// Password to gain admin rights
+	$admin_nickname		= 'admin';			        // Nickname with admin rights (must be title-cased)
+	$admin_admin		= 'name';			        // Name of admin to be showed on comments
 
 	// Display source code without giving away encryption key
 	if (isset($_GET['source']) and basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 		header("Content-Type: text/plain");
 		echo '<?php' . PHP_EOL . PHP_EOL;
-		echo "\t" . '// Copyright (C) 2014 Jacob Barkdull' . PHP_EOL;
+		echo "\t" . '// Copyright (C) 2014 Jacob Barkdull, (C) 2026 Manel Guerra' . PHP_EOL;
 		echo "\t" . '//' . PHP_EOL;
-		echo "\t" . '//' . "\t" . 'I, Jacob Barkdull, hereby release this work into the public domain.' . PHP_EOL;
+		echo "\t" . '//' . "\t" . 'Jacob Barkdull and Manel Guerra hereby release this work into the public domain.' . PHP_EOL;
 		echo "\t" . '//' . "\t" . 'This applies worldwide. If this is not legally possible, I grant any' . PHP_EOL;
 		echo "\t" . '//' . "\t" . 'entity the right to use this work for any purpose, without any' . PHP_EOL;
 		echo "\t" . '//' . "\t" . 'conditions, unless such conditions are required by law.' . PHP_EOL . PHP_EOL . PHP_EOL;
@@ -43,7 +46,6 @@
 		echo "\t" . '$encryption_key' . "\t\t" . '= \'8CharKey\';' . "\t\t\t" . '// Unique 8 to 32 character encryption key' . PHP_EOL;
 		echo "\t" . '$notification_email' . "\t" . '= \'example@example.com\';' . "\t" . '// E-mail for notification of new comments' . PHP_EOL;
 		echo "\t" . '$admin_nickname' . "\t\t" . '= \'admin\';' . "\t\t\t" . '// Nickname with admin rights (must be title-cased)' . PHP_EOL;
-		echo "\t" . '$admin_password' . "\t\t" . '= \'passwd\';' . "\t\t\t" . '// Password to gain admin rights' . PHP_EOL . PHP_EOL;
 		echo '?>';
 	}
 
