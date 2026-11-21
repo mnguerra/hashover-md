@@ -1,3 +1,11 @@
+Changes by Manel Guerra 2026-11-21
+--------------------------------------------------------------------------------
+* Same design form reply and reply-comment forms
+    * CSS alignment and simplifying
+    * Message (locales.php) and html code (javascript-mode.php) upgrading
+    * Better viewing on mobile devices
+
+
 Changes by Manel Guerra 2026-11-19
 --------------------------------------------------------------------------------
 Version 1.0.2, better comment handling:

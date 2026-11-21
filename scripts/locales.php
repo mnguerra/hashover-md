@@ -67,7 +67,7 @@
 
 		'ca' => array(
 			'comment_form'	=> 'Text del comentari',
-			'reply_form'	=> 'Contestar aqui',
+			'reply_form'	=> 'Text de la resposta',
 			'post_button'	=> 'Comentar',
 			'options'	=> 'Opcions',
 			'published_on'  => 'a',
@@ -93,7 +93,7 @@
 			'cmt_tstart'=> 'Fa',
 			'cmt_tend'  => '',
 			'cmt_today'   => 'avui',
-			'post_reply'	=> 'Respondre a un comentari',
+			'post_reply'	=> 'Respondre el comentari',
 			'delete'	=> 'Esborra',
 			'subscribe_tip'	=> 'Subscripció a notificacions per correu-e',
 			'subscribe'	=> 'Subscripció',
@@ -118,7 +118,7 @@
 
 		'es' => array(
 			'comment_form'	=> 'Texto del comentario',
-			'reply_form'	=> 'Contestar aquí',
+			'reply_form'	=> 'Texto de la respuesta',
 			'post_button'	=> 'Comentar',
 			'options'	=> 'Opciones',
 			'published_on'  => 'en',

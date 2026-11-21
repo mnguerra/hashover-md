@@ -89,40 +89,37 @@ function reply(r, f) {
 		form_html += '<?php echo (isset($_COOKIE['name']) and !empty($_COOKIE['name'])) ? '<input type="button" value="&#x25BC; ' . $text['options'] . '" onClick="options(' . "\''+r+'\'" . '); this.value = (this.value == \\\'&#x25BC; ' . $text['options'] . '\\\') ? \\\'&#x25B2; ' . $text['options'] . '\\\' : \\\'&#x25BC; ' . $text['options'] . '\\\'; return false;">' : ''; ?>\n';
 	}
 
-	form_html += '<input type="button" value="<?php echo $text['cancel']; ?>" onClick="cancelform(\''+r+'\'); return false;">\n\
-	</span>\n\
-	<b class="cmtfont"><?php echo $text['reply_to_cmt']; ?></b>\n\
-	<span<?php echo (isset($_COOKIE['name']) and !empty($_COOKIE['name'])) ? ' style="max-height: 0px;"' : ''; ?> class="options" id="options-'+r+'"><hr style="clear: both;">\n\
-	<table width="100%" cellpadding="0" cellspacing="0">\n\
-	<tbody>\n<tr>\n';
+//	form_html += '<input type="button" value="<?php echo $text['cancel']; ?>" onClick="cancelform(\''+r+'\'); return false;">\n\
+	form_html += '</span>\n<b class="cmtfont"><?php echo $text['reply_to_cmt']; ?></b>\n\
+	<span<?php echo (isset($_COOKIE['name']) and !empty($_COOKIE['name'])) ? ' style="max-height: 0px;"' : ''; ?> class="options" id="options-'+r+'">\n';
 
 <?php if ($icons == 'yes') { ?>
 	if (name_on == 'yes') {
-		form_html += '<td width="1%" rowspan="2">\n<?php echo $avatar_image; ?>\n</td>\n';
+		form_html += '<?php echo $avatar_image; ?>\n';
 	}
 <?php }?>
 
 	if (name_on == 'yes') {
-		form_html += '<td>\n<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : ''; ?>" maxlength="30" class="opt-name" placeholder="<?php echo $text['nickname']; ?>">\n</td>\n';
+		form_html += '<input type="text" name="name" title="<?php echo $text['nickname_tip']; ?>" value="<?php echo (isset($_COOKIE['name'])) ? $_COOKIE['name'] : ''; ?>" maxlength="30" class="form-data opt-name" placeholder="<?php echo $text['nickname']; ?>">\n';
 	}
 
 	<?php if ($is_mobile == 'yes') echo 'form_html += \'</tr>\n<tr>\n\';'; ?>
 
 	if (email_on == 'yes') {
-		form_html += '<td>\n<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="opt-email" placeholder="<?php echo $text['email']; ?>">\n</td>\n';
+		form_html += '<input type="text" name="email" title="<?php echo $text['email']; ?>" value="<?php echo (isset($_COOKIE['email'])) ? $_COOKIE['email'] : ''; ?>" class="form-data opt-email" placeholder="<?php echo $text['email']; ?>">\n';
 	}
 
 	if (sites_on == 'yes') {
-		form_html += '<td>\n<input type="text" name="website" title="<?php echo $text['website']; ?>" value="<?php echo (isset($_COOKIE['website'])) ? $_COOKIE['website'] : ''; ?>" class="opt-website" placeholder="<?php echo $text['website']; ?>">\n</td>\n';
+		form_html += '<input type="text" name="website" title="<?php echo $text['website']; ?>" value="<?php echo (isset($_COOKIE['website'])) ? $_COOKIE['website'] : ''; ?>" class="form-data opt-website" placeholder="<?php echo $text['website']; ?>">\n';
 	}
 
-	form_html += '</tr>\n\
-	</tbody>\n</table>\n</span>\n\
+	form_html += '</span>\n\
 	<textarea rows="6" cols="62" name="comment" placeholder="<?php echo $text['reply_form']; ?>" style="width: 100%;" title="<?php echo $text['cmt_tip']; ?>"></textarea><br>\n\
-	<input class="post_cmt" type="submit" value="<?php echo $text['post_reply']; ?>" style="width: 100%;" onClick="return noemailreply(\''+r+'\');" onsubmit="return noemailreply(\''+r+'\');">\n\<?php
+	<span class="button_area"><input class="post_cmt" type="submit" value="<?php echo $text['post_reply']; ?>" onClick="return noemailreply(\''+r+'\');" onsubmit="return noemailreply(\''+r+'\');">\n\<?php
 	echo (isset($_GET['canon_url']) or isset($canon_url)) ? "\n\t" . '<input type="hidden" name="canon_url" value="' . $page_url . '">\n\\' . PHP_EOL : PHP_EOL; ?>
 	<input type="hidden" name="cmtfile" value="' + f + '">\n\
-	<input type="hidden" name="reply_to" value="'+f+'">\n';
+	<input type="hidden" name="reply_to" value="'+f+'">\n\
+	<input type="button" class="post_cmt" value="<?php echo $text['cancel']; ?>" onClick="cancelform(\''+r+'\'); return false;"></span>';
 
 	document.getElementById('cmtopts-' + r).style.display = 'none';
 	document.getElementById('cmtforms-' + r).innerHTML = form_html;
@@ -330,31 +327,22 @@ function sort_comments(method) {
 		echo jsAddSlashes('<span class="cmtnumber"><a rel="nofollow" href="#comments">#' . $total_count . '</a></span>\n');
 	}
 
-	echo jsAddSlashes('<div class="cmtbox" align="center">\n');
-	echo jsAddSlashes('<table width="100%" cellpadding="0" cellspacing="0">\n<tbody>\n<tr>\n'), PHP_EOL;
+	echo jsAddSlashes('<div class="cmtbox">\n');
 
 	// Display name input tag if told to
 	echo "if (name_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td>\n');
-	echo "\t" . jsAddSlashes('<input type="text" name="name" title="' . $text['nickname_tip'] . '"' . (isset($_COOKIE['name']) ? ' value="' . $_COOKIE['name'] . '"' : '') . ' maxlength="30" class="opt-name" placeholder="' . $text['nickname'] . '">\n');
-	echo "\t" . jsAddSlashes('</td>\n');
+	echo "\t" . jsAddSlashes('<input type="text" name="name" title="' . $text['nickname_tip'] . '"' . (isset($_COOKIE['name']) ? ' value="' . $_COOKIE['name'] . '"' : '') . ' maxlength="30" class="form-data opt-name" placeholder="' . $text['nickname'] . '">\n');
 	echo "}\n\n";
 
 	// Display email input tag if told to
 	echo "if (email_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td>\n');
-	echo "\t" . jsAddSlashes('<input type="text" name="email" title="' . $text['email'] . '"' . (isset($_COOKIE['email']) ? ' value="' . $_COOKIE['email'] . '"' : '') . ' class="opt-email" placeholder="' . $text['email'] . '">\n');
-	echo "\t" . jsAddSlashes('</td>\n');
+	echo "\t" . jsAddSlashes('<input type="text" name="email" title="' . $text['email'] . '"' . (isset($_COOKIE['email']) ? ' value="' . $_COOKIE['email'] . '"' : '') . ' class="form-data opt-email" placeholder="' . $text['email'] . '">\n');
 	echo "}\n\n";
 
 	// Display website input tag if told to
 	echo "if (sites_on == 'yes') {\n";
-	echo "\t" . jsAddSlashes('<td' . (($is_mobile == 'yes') ? ' colspan="2"' : '') . '>\n');
-	echo "\t" . jsAddSlashes('<input type="text" name="website" title="' . $text['website'] . '"' . (isset($_COOKIE['website']) ? ' value="' . $_COOKIE['website'] . '"' : '') . ' class="opt-website" placeholder="' . $text['website'] . '">\n');
-	echo "\t" . jsAddSlashes('</td>\n');
+	echo "\t" . jsAddSlashes('<input type="text" name="website" title="' . $text['website'] . '"' . (isset($_COOKIE['website']) ? ' value="' . $_COOKIE['website'] . '"' : '') . ' class="form-data opt-website" placeholder="' . $text['website'] . '">\n');
 	echo "}\n\n";
-
-	echo jsAddSlashes('</tr>\n</tbody>\n</table>\n') . PHP_EOL;
 
 	echo jsAddSlashes('<div id="requiredFields" style="display: none;">\n');
 	echo jsAddSlashes('<input type="text" name="summary" value="" placeholder="Summary">\n');
@@ -368,7 +356,7 @@ function sort_comments(method) {
 	$replyborder = (isset($_COOKIE['success']) and $_COOKIE['success'] == "no") ? ' border: 2px solid #FF0000 !important; -moz-border-radius: 5px 5px 0px 0px; border-radius: 5px 5px 0px 0px;' : '';
 
 	echo jsAddSlashes('<textarea rows="' . $rows . '" cols="63" name="comment" placeholder="' . $text['comment_form'] . '" style="width: 100%;' . $replyborder . '" title="' . $text['cmt_tip'] . '"></textarea><br>\n');
-    echo jsAddSlashes('<input class="post_cmt" type="submit" value="' . $text['post_button'] . '" style="width: 100%;" onClick="return noemail();" onsubmit="return noemail();"><br>\n');
+    echo jsAddSlashes('<span class="button_area"><input class="post_cmt" type="submit" value="' . $text['post_button'] . '" onClick="return noemail();" onsubmit="return noemail();"></span><br>\n');
 	echo (isset($_GET['canon_url']) or isset($canon_url)) ? jsAddSlashes('<input type="hidden" name="canon_url" value="' . $page_url . '">\n') : '';
 	echo (isset($_COOKIE['replied'])) ? jsAddSlashes('<input type="hidden" name="reply_to" value="' . $_COOKIE['replied'] . '">\n') : '';
 	echo jsAddSlashes('</div>\n</form>\n'). PHP_EOL;

@@ -17,18 +17,23 @@
 	clear: both;
 }
 
-#hashover form div.cmtbox {
+#hashover form div.cmtbox,
+#hashover .cmtdiv .cmtbubble {
 	margin-left: 65px;
 	padding: 6px 8px 8px 8px;
+}
+
+#hashover form table {
+	margin: 0;
 }
 
 #hashover form input,
 #hashover form textarea,
 #hashover form table input {
 	padding: 2px;
-	background-color: #f5f5f5 ! important;
 	color: #222222;
 	border: 1px solid #eaeaea;
+	font-size: .9rem;
 }
 
 #hashover form input,
@@ -65,25 +70,32 @@
 	display: none;
 }
 
-#hashover form div textarea {
+#hashover textarea,
+#hashover .cmtdiv textarea {
 	width: 100%;
 	margin-bottom: 0px ! important;
 	padding: 5px 5px 8px 5px;
 	vertical-align: top;
-	border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 5px 5px;
 	resize: vertical;
 }
 
-#hashover form input.post_cmt {
-	border-top: none;
-	margin-top: 0px ! important;
-	border-radius: 0px 0px 5px 5px;
+#hashover .button_area {
+	margin-top: 5px;
+	display:block;
+	text-align: center;
+}
+#hashover form input.post_cmt,
+#hashover .cmtdiv input.post_cmt {
+	border-radius: 5px 5px 5px 5px;
 	padding: 6px 4px 6px 4px;
 }
 
-#hashover input.post_cmt:hover {
+#hashover input.post_cmt:hover,
+#hashover .cmtdiv input.post_cmt:hover {
 	background-color: #F0F0F0 ! important;
 	cursor: pointer;
+	box-shadow: 0 0 8px 0 #909090;
 }
 
 #hashover input.post_cmt:focus {
@@ -91,14 +103,11 @@
 	border-color: #000000 ! important;
 }
 
-#hashover textarea:hover, 
+#hashover textarea:hover,
+#hashover .cmtdiv textarea:hover,
 #hashover input:hover {
 	background-color: #f5f5f5 ! important;
-	border-color: #eaeaea ! important;
-}
-
-#hashover textarea:hover {
-	border-color: #909090;
+	border-color: #c3c3c3 ! important;
 }
 
 #hashover textarea:focus,
@@ -157,6 +166,31 @@
 	padding: 2px 0px 6px 0px;
 }
 
+#hashover input.form-data {
+	width: 33%;
+	height: 32px;
+	font-size: 14px;
+	padding-left: 28px;
+	padding-right: 6px;
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	color: #808080;
+	margin-right: 0.3%;
+	margin-bottom: 5px;
+	float: left;
+}
+
+@media only screen and (max-width: 500px) {
+	#hashover input.form-data {
+		width: 100%;
+		margin-right: 0px;
+		float: none;
+		display: block;
+	}
+}
+
+
 #hashover input.opt-name {
 	background-image: url('./images/name.png');
 }
@@ -202,12 +236,6 @@
 	transition: background 140ms linear 0ms;
 }
 
-#hashover .cmtdiv .cmtopts span.cmtbuttons a:first-child {
-}
-
-#hashover .cmtdiv .cmtopts span.cmtbuttons a:hover {
-}
-
 #hashover a.has-email {
 	background-image: url('./images/has-email.png');
 }
@@ -230,10 +258,6 @@
 	clear: both;
 }
 
-#hashover input::-moz-focus-inner {
-	border: 0px;
-}
-
 #hashover .cmtdiv {
 	clear: both;
 	border-bottom: 1px dashed rgb(190, 190, 190);
@@ -242,20 +266,8 @@
 #hashover form div.cmtbox,
 #hashover .cmtbubble {
 	overflow: hidden;
-	text-align: left;
 	height: auto;
 	width: auto;
-}
-
-#hashover form div.cmtbox,
-#hashover .cmtdiv .cmtbubble {
-	margin-left: 64px;
-}
-
-#hashover form div.cmtbox table tr td,
-#hashover form div.cmtbox table tr {
-    border: none !important;
-    text-align: right;
 }
 
 #hashover .cmtdiv.reply .cmtbubble {
@@ -278,11 +290,6 @@
 	padding: 0px 8px 0px 8px;
 }
 
-#hashover .cmtdiv hr {
-	background-color: #C1C1C1;
-	margin: 0px;
-}
-
 #hashover .cmtdiv table {
 	padding: 0px 6px 0px 5px;
 	margin: 5px 0px 5px 0px;
@@ -292,28 +299,6 @@
 	line-height: normal;
 }
 
-#hashover .cmtdiv input,
-#hashover .cmtdiv .optionbuttons a,
-#hashover .cmtdiv label {
-	font-size: 11px ! important;
-}
-
-#hashover .cmtdiv input.post_cmt {
-	margin: 0px;
-	border: none;
-	background-color: #F0F0F0;
-}
-
-#hashover .cmtdiv input.post_cmt:hover {
-	background-color: #E9E9E9 ! important;
-	cursor: pointer;
-}
-
-#hashover .cmtdiv input.post_cmt:focus {
-	background-color: #E5E5E5 ! important;
-}
-
-#hashover .cmtdiv input[type="button"],
 #hashover .cmtdiv .optionbuttons a,
 #hashover .cmtdiv label {
 	display: inline-block;
@@ -328,7 +313,7 @@
 	color: #222222;
 }
 
-#hashover .cmtdiv input[type="button"]:hover,
+/*#hashover .cmtdiv input[type="button"]:hover,*/
 #hashover .cmtdiv .optionbuttons a:hover,
 #hashover .cmtdiv label:hover {
 	border-color: #C1C1C1 ! important;
@@ -349,14 +334,6 @@
 #hashover .cmtdiv table input {
 	margin: 2px 0px 2px 0px;
 	height: 26px;
-}
-
-#hashover .cmtdiv textarea {
-	margin: 0px ! important;
-	border-left: none ! important;
-	border-right: none ! important;
-	border-color: #C1C1C1;
-	border-radius: 0px ! important;
 }
 
 #hashover .cmtfont {
@@ -434,9 +411,6 @@
 	padding-right: 19px;
 	float: left;
 	margin-right: -1px;
-	/*
-	background-image: url('./images/bubble-tick.png');
-	*/
 	background-position: right center;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
